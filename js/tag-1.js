@@ -1,0 +1,2 @@
+import {param} from '/js/flow-common.js';
+document.addEventListener('DOMContentLoaded',()=>{const b=document.getElementById('completeTag');b?.addEventListener('click',()=>{const slug=param('slug')||'',key='bearn_tags_'+slug;let s={};try{s=JSON.parse(sessionStorage.getItem(key)||'{}')}catch{}s.tag1=true;sessionStorage.setItem(key,JSON.stringify(s));location.href='/tag-2.html?slug='+encodeURIComponent(slug);});});

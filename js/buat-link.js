@@ -1,0 +1,1 @@
+import {init} from '/js/core.js'; document.addEventListener('DOMContentLoaded',()=>init());
