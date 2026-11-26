@@ -1,1 +1,63 @@
-<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f5f7fb"><title>Masuk — BEARN</title><link rel="stylesheet" href="/css/login.css"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script type="module" src="/js/login.js"></script></head><body ><div data-component="navbar"></div><main class="app"><section class="login-shell"><div class="card"><span class="eyebrow">WELCOME BACK</span><h1>Masuk ke BEARN</h1><p class="muted">Kelola link dan penghasilanmu.</p><form id="authForm"><div class="field"><label>Email</label><input name="email" type="email" required></div><div class="field" class="field field-spaced"><label>Password</label><input name="password" type="password" required minlength="6"></div><div class="page-actions"><button class="btn">Masuk</button></div></form><p class="muted">Belum punya akun? <a href="/register.html">Daftar</a></p></div></section></main><div data-component="footer"></div></body></html>
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f5f7fb"><title>Masuk — BEARN</title>
+<link rel="stylesheet" href="/css/login.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script type="module" src="/js/login.js"></script>
+</head>
+<body>
+<div data-component="navbar"></div>
+<main class="app auth-app">
+<section class="login-shell auth-shell">
+<div class="auth-aside">
+<div class="auth-brand"><span class="auth-brand-mark">B</span><span>BEARN<small>LINK MANAGEMENT PLATFORM</small></span></div>
+<div class="aside-copy"><span class="eyebrow">WELCOME BACK</span><h2>Semua link dan penghasilanmu, dalam satu tempat.</h2><p>Masuk kembali dan lanjutkan pekerjaanmu dengan pengalaman yang lebih praktis.</p></div>
+<div class="aside-foot"><span class="aside-dot"></span> Secure account access</div>
+</div>
+<div class="card auth-card">
+<div class="mobile-brand"><span class="auth-brand-mark">B</span><b>BEARN</b></div>
+<span class="eyebrow">ACCOUNT ACCESS</span>
+<h1>Selamat datang kembali</h1>
+<p class="muted auth-subtitle">Pilih akunmu untuk melanjutkan.</p>
+<div id="usernameNotice" class="auth-float-notice" role="alert" aria-live="polite"></div>
+<section id="accountPicker" class="account-picker">
+<div class="field auth-field account-search-field"><label for="accountSearch">Username</label><input id="accountSearch" type="text" autocomplete="username" placeholder="Cari atau pilih username akun"></div>
+<div id="savedAccounts" class="saved-accounts"></div>
+<div id="emptyAccounts" class="empty-accounts" hidden>
+<div class="empty-avatar">U</div><b>Belum ada akun tersimpan</b><span>Masuk pertama kali menggunakan email akunmu.</span>
+</div>
+<button type="button" id="useEmailLogin" class="text-action">Masuk menggunakan email</button>
+</section>
+<form id="authForm" class="auth-form" novalidate hidden>
+<input type="hidden" name="email">
+<div class="selected-account" id="selectedAccount">
+<button type="button" id="backToAccounts" class="back-button" aria-label="Kembali pilih akun">←</button>
+<span class="account-avatar" id="selectedAvatar">U</span>
+<span class="selected-account-copy"><b id="selectedUsername">Username</b><small id="selectedEmail"></small></span>
+<button type="button" id="changeAccount" class="change-account">Ganti</button>
+</div>
+<div id="passwordNotice" class="auth-float-notice password-notice" role="alert" aria-live="polite"></div>
+<div class="field auth-field">
+<label for="loginPassword">Kata sandi</label>
+<div class="password-wrap"><input id="loginPassword" name="password" type="password" autocomplete="current-password" placeholder="Masukkan kata sandi" required><button type="button" class="password-toggle" data-toggle="loginPassword" aria-label="Tampilkan kata sandi"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/><path class="eye-slash" d="M3 3l18 18"/></svg></button></div>
+</div>
+<div class="forgot-row"><a href="/forgot-password.html">Lupa kata sandi?</a></div>
+<div class="page-actions"><button class="btn auth-submit" type="submit"><span>Masuk</span><span aria-hidden="true">→</span></button></div>
+</form>
+<form id="emailLoginForm" class="auth-form" hidden novalidate>
+<div id="emailNotice" class="auth-float-notice password-notice" role="alert" aria-live="polite"></div>
+<div class="field auth-field"><label for="loginEmail">Alamat Gmail</label><input id="loginEmail" name="email" type="email" autocomplete="username" placeholder="nama@gmail.com" required></div>
+<div class="field auth-field"><label for="emailPassword">Kata sandi</label><div class="password-wrap"><input id="emailPassword" name="password" type="password" autocomplete="current-password" placeholder="Masukkan kata sandi" required><button type="button" class="password-toggle" data-toggle="emailPassword" aria-label="Tampilkan kata sandi"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/><path class="eye-slash" d="M3 3l18 18"/></svg></button></div></div>
+<div class="forgot-row"><a href="/forgot-password.html">Lupa kata sandi?</a></div>
+<div class="page-actions"><button class="btn auth-submit" type="submit">Masuk <span aria-hidden="true">→</span></button></div>
+<button type="button" id="backFromEmail" class="text-action">Kembali ke daftar username</button>
+</form>
+<div class="auth-bottom"><span>Belum punya akun?</span> <a href="/register.html">Daftar sekarang</a></div>
+<div class="auth-security"><span>♢</span> Koneksi aman dan terenkripsi</div>
+</div>
+</section>
+</main>
+<div data-component="footer"></div>
+</body></html>

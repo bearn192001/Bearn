@@ -1,1 +1,55 @@
-<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f5f7fb"><title>Daftar — BEARN</title><link rel="stylesheet" href="/css/register.css"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script type="module" src="/js/register.js"></script></head><body ><div data-component="navbar"></div><main class="app"><section class="login-shell"><div class="card"><span class="eyebrow">CREATE ACCOUNT</span><h1>Buat akun BEARN</h1><p class="muted">Satu akun untuk mengelola semua link.</p><form id="authForm" data-mode="register"><div class="field"><label>Nama</label><input name="name" required></div><div class="field" class="field field-spaced"><label>Email</label><input name="email" type="email" required></div><div class="field" class="field field-spaced"><label>Password</label><input name="password" type="password" required minlength="6"></div><div class="page-actions"><button class="btn">Daftar</button></div></form><p class="muted">Sudah punya akun? <a href="/login.html">Masuk</a></p></div></section></main><div data-component="footer"></div></body></html>
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f5f7fb"><title>Daftar — BEARN</title>
+<link rel="stylesheet" href="/css/register.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script type="module" src="/js/register.js"></script>
+</head>
+<body>
+<div data-component="navbar"></div>
+<main class="app auth-app">
+<section class="login-shell auth-shell register-shell">
+<div class="auth-aside">
+<div class="auth-brand"><span class="auth-brand-mark">B</span><span>BEARN<small>LINK MANAGEMENT PLATFORM</small></span></div>
+<div class="aside-copy"><span class="eyebrow">CREATE YOUR ACCOUNT</span><h2>Mulai kelola link dengan cara yang lebih mudah.</h2><p>Buat akun BEARN dan nikmati semua alat penting dalam satu dashboard.</p></div>
+<div class="aside-foot"><span class="aside-dot"></span> Simple · Secure · Professional</div>
+</div>
+<div class="card auth-card">
+<div class="mobile-brand"><span class="auth-brand-mark">B</span><b>BEARN</b></div>
+<span class="eyebrow">GET STARTED</span>
+<h1>Buat akun baru</h1>
+<p class="muted auth-subtitle">Lengkapi data berikut untuk mulai menggunakan BEARN.</p>
+<div id="registerNotice" class="auth-float-notice" role="alert" aria-live="polite"></div>
+<form id="authForm" class="auth-form register-form" data-mode="register" novalidate>
+<div class="field auth-field"><label for="regUsername">Username</label><input id="regUsername" name="username" type="text" autocomplete="username" placeholder="Contoh: saputra123" minlength="3" maxlength="24" pattern="[A-Za-z0-9_]+" required><small class="field-hint">3–24 karakter, gunakan huruf, angka, atau underscore.</small></div>
+<div class="field auth-field"><label for="regEmail">Alamat Gmail</label><input id="regEmail" name="email" type="email" autocomplete="email" placeholder="nama@gmail.com" required></div>
+<div class="field auth-field"><label for="regPassword">Kata sandi</label><div class="password-wrap"><input id="regPassword" name="password" type="password" autocomplete="new-password" placeholder="Buat kata sandi" minlength="8" required><button type="button" class="password-toggle" data-toggle="regPassword" aria-label="Tampilkan kata sandi"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/><path class="eye-slash" d="M3 3l18 18"/></svg></button></div>
+<div class="strength-wrap"><div class="strength-track"><span id="strengthBar"></span></div><div class="strength-meta"><span>Kekuatan kata sandi</span><b id="strengthLabel">Belum diisi</b></div></div></div>
+<div class="field auth-field"><label for="regConfirm">Konfirmasi kata sandi</label><div class="password-wrap"><input id="regConfirm" name="confirmPassword" type="password" autocomplete="new-password" placeholder="Ulangi kata sandi" required><button type="button" class="password-toggle" data-toggle="regConfirm" aria-label="Tampilkan kata sandi"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/><path class="eye-slash" d="M3 3l18 18"/></svg></button></div><small id="confirmHint" class="field-hint"></small></div>
+<div class="page-actions"><button class="btn auth-submit" type="submit" id="registerSubmit">Daftar sekarang <span aria-hidden="true">→</span></button></div>
+</form>
+<div class="auth-bottom"><span>Sudah punya akun?</span> <a href="/login.html">Masuk</a></div>
+<div class="auth-security"><span>♢</span> Data akunmu dijaga dengan aman</div>
+</div>
+</section>
+</main>
+<div id="credentialModal" class="credential-modal" hidden>
+<div class="credential-backdrop"></div>
+<section class="credential-dialog" role="dialog" aria-modal="true" aria-labelledby="credentialTitle">
+<div class="credential-success">✓</div><span class="eyebrow">ACCOUNT CREATED</span><h2 id="credentialTitle">Pendaftaran berhasil!</h2><p class="muted">Simpan informasi akun ini agar kamu tidak lupa saat masuk kembali.</p>
+<div id="credentialCard" class="credential-card">
+<div class="credential-card-head"><span class="auth-brand-mark">B</span><div><b>BEARN ACCOUNT</b><small>Informasi akun pribadi</small></div><span class="credential-badge">BERHASIL</span></div>
+<div class="credential-item"><span>USERNAME</span><b id="credentialUsername"></b></div>
+<div class="credential-item"><span>GMAIL</span><b id="credentialEmail"></b></div>
+<div class="credential-item"><span>KATA SANDI</span><b id="credentialPassword"></b></div>
+<div class="credential-card-foot">Simpan di tempat pribadi. Jangan bagikan informasi ini kepada siapa pun.</div>
+</div>
+<div class="credential-actions"><button type="button" class="btn auth-submit" id="saveCredentialImage">Simpan screenshot</button><button type="button" class="btn secondary" id="continueToLogin">Lanjut ke login</button></div>
+<p class="credential-warning">Kata sandi hanya ditampilkan pada layar ini. Setelah ditutup, BEARN tidak dapat menampilkannya kembali.</p>
+</section>
+</div>
+<div data-component="footer"></div>
+</body></html>
