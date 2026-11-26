@@ -51,8 +51,10 @@ export async function loadComponents() {
     menu.hidden = true;
     toggle.setAttribute('aria-expanded','false');
     toggle.setAttribute('aria-label','Buka menu');
-    toggle.querySelector('.menu-icon').innerHTML = '<i class="fa-solid fa-bars" aria-hidden="true"></i>';
-    toggle.querySelector('.menu-label').textContent = 'Menu';
+    const icon = toggle.querySelector('.menu-icon');
+    const label = toggle.querySelector('.menu-label');
+    if (icon) icon.innerHTML = '<i class="fa-solid fa-bars" aria-hidden="true"></i>';
+    if (label) label.textContent = 'Menu';
   };
   toggle.addEventListener('click', event => {
     event.preventDefault();
@@ -60,18 +62,28 @@ export async function loadComponents() {
     menu.hidden = !opening;
     toggle.setAttribute('aria-expanded',String(opening));
     toggle.setAttribute('aria-label',opening ? 'Tutup menu' : 'Buka menu');
-    toggle.querySelector('.menu-icon').innerHTML = opening
+    const icon = toggle.querySelector('.menu-icon');
+    const label = toggle.querySelector('.menu-label');
+    if (icon) icon.innerHTML = opening
       ? '<i class="fa-solid fa-xmark" aria-hidden="true"></i>'
       : '<i class="fa-solid fa-bars" aria-hidden="true"></i>';
-    toggle.querySelector('.menu-label').textContent = opening ? 'Tutup' : 'Menu';
+    if (label) label.textContent = opening ? 'Tutup' : 'Menu';
   });
   document.addEventListener('click', event => {
-    if (!menu.hidden && !event.target.closest('.topbar')) closeMenu();
+    const target = event.target instanceof Element ? event.target : null;
+    if (!menu.hidden && target && !target.closest('.topbar')) closeMenu();
   });
   document.addEventListener('keydown', event => {
     if (event.key === 'Escape' && !menu.hidden) { closeMenu(); toggle.focus(); }
   });
   menu.addEventListener('click', event => {
-    if (event.target.closest('a')) closeMenu();
+    const link = event.target instanceof Element ? event.target.closest('a[href]') : null;
+    if (link) closeMenu(); // Close only; never cancel the browser's normal link navigation.
+  });
+
+  document.querySelectorAll('[data-logout]').forEach(button => {
+    if (button.dataset.bound) return;
+    button.dataset.bound = '1';
+    button.addEventListener('click', () => window.BEARN?.logout?.());
   });
 }
