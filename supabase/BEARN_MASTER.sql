@@ -78,8 +78,17 @@ create table if not exists public.withdraw_requests(id uuid primary key default 
 -- server webhook using the Supabase service role. Never expose service role in browser.
 alter table public.auto_links
   add column if not exists access_mode text not null default 'free_tags'
-    check (access_mode in ('free_tags','paid_direct')),
+    check (access_mode in ('instant','free_tags','paid_direct','choice')),
   add column if not exists price bigint not null default 0 check(price >= 0);
+alter table public.auto_links
+  add column if not exists password_enabled boolean not null default false,
+  add column if not exists password_salt text,
+  add column if not exists password_hash text;
+alter table public.auto_links
+  add constraint auto_links_password_record_check
+  check ((password_enabled = false and password_salt is null and password_hash is null)
+    or (password_enabled = true and password_salt is not null and password_hash is not null
+      and password_salt ~ '^[a-f0-9]{32}$' and password_hash ~ '^[a-f0-9]{64}$'));
 
 create table if not exists public.auto_link_orders (
   id uuid primary key default gen_random_uuid(),
@@ -224,7 +233,7 @@ grant execute on function public.get_dashboard_metrics() to authenticated;
 revoke all privileges on table public.auto_links from anon, authenticated;
 grant select (id, user_id, title, slug, is_published, click_count, created_at, updated_at, access_mode, price)
   on table public.auto_links to anon, authenticated;
-grant insert (user_id, title, slug, destination_url, is_published, access_mode, price)
+grant insert (user_id, title, slug, destination_url, is_published, access_mode, price, password_enabled, password_salt, password_hash)
   on table public.auto_links to authenticated;
 grant update (title, destination_url, is_published, access_mode, price, updated_at)
   on table public.auto_links to authenticated;
@@ -351,7 +360,7 @@ begin
     raise exception 'Token sesi tidak valid';
   end if;
   select id into v_link_id from public.auto_links
-    where slug = p_slug and is_published = true and access_mode = 'free_tags';
+    where slug = p_slug and is_published = true and access_mode in ('free_tags','choice');
   if v_link_id is null then raise exception 'Auto Link gratis tidak ditemukan atau tidak aktif'; end if;
   insert into public.auto_link_flow_sessions(auto_link_id, token_hash, visitor_key, view_date)
     values(v_link_id, p_token_hash, p_visitor_key, current_date);
@@ -419,7 +428,7 @@ begin
     where token_hash = p_token_hash for update;
   if not found or v_session.expires_at <= now() then raise exception 'Sesi tidak valid atau kedaluwarsa'; end if;
   select * into v_link from public.auto_links where id = v_session.auto_link_id for update;
-  if not found or not v_link.is_published or v_link.access_mode <> 'free_tags' then
+  if not found or not v_link.is_published or v_link.access_mode not in ('free_tags','choice') then
     raise exception 'Auto Link tidak aktif';
   end if;
   if not (v_session.tag1_completed and v_session.tag2_completed and v_session.tag3_completed) then
