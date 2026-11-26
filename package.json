@@ -1,0 +1,7 @@
+{
+  "name": "bearn-platform",
+  "private": true,
+  "version": "2.0.0",
+  "type": "module",
+  "scripts": {"check": "node --check js/core.js && node --check js/auth.js && node --check js/links.js && node --check js/wallet.js && node --check js/main.js"}
+}
