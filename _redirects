@@ -5,3 +5,24 @@
 /akun /akun.html 200
 /pengaturan /pengaturan.html 200
 /posts /posts.html 200
+
+/buat-link /buat-link.html 200
+/create-auto-link /create-auto-link.html 200
+/create-payment-link /create-payment-link.html 200
+/go /go.html 200
+/payment /payment.html 200
+/final /final.html 200
+/tag-1 /tag-1.html 200
+/tag-2 /tag-2.html 200
+/tag-3 /tag-3.html 200
+
+/create-auto-link /create-auto-link.html 200
+/create-payment-link /create-payment-link.html 200
+/go /go.html 200
+/payment /payment.html 200
+/tag-1 /tag-1.html 200
+/tag-2 /tag-2.html 200
+/tag-3 /tag-3.html 200
+
+/with-payment-link /with-payment-link.html 200
+/with-auto-link /with-auto-link.html 200
