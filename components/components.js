@@ -8,21 +8,27 @@ export async function loadComponents() {
     document.head.appendChild(icons);
   }
 
-  const stylesheet = document.querySelector('link[data-bearn-shared]') || (() => {
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = '/css/navbar-footer.css';
-    link.dataset.bearnShared = 'true';
-    document.head.appendChild(link);
-    return link;
-  })();
-
-  // Wait until shared styles are ready to prevent an unstyled navbar flash.
-  if (!stylesheet.sheet) {
-    await new Promise(resolve => {
+  let stylesheet = document.querySelector('link[data-bearn-shared]');
+  if (!stylesheet) {
+    stylesheet = document.createElement('link');
+    stylesheet.rel = 'stylesheet';
+    stylesheet.href = '/css/navbar-footer.css';
+    stylesheet.dataset.bearnShared = 'true';
+    // Register before appending: a cached CSS response can finish immediately.
+    const ready = new Promise(resolve => {
       stylesheet.addEventListener('load', resolve, {once:true});
       stylesheet.addEventListener('error', resolve, {once:true});
     });
+    document.head.appendChild(stylesheet);
+    await Promise.race([ready, new Promise(resolve => setTimeout(resolve, 2500))]);
+  } else if (!stylesheet.sheet) {
+    await Promise.race([
+      new Promise(resolve => {
+        stylesheet.addEventListener('load', resolve, {once:true});
+        stylesheet.addEventListener('error', resolve, {once:true});
+      }),
+      new Promise(resolve => setTimeout(resolve, 2500))
+    ]);
   }
 
   for (const host of document.querySelectorAll('[data-component]')) {
