@@ -102,6 +102,12 @@ export function bindAuth() {
   const loginForm = $('authForm');
   if (loginForm && loginForm.dataset.mode !== 'register') {
     renderAccounts();
+    const switchEmail = new URLSearchParams(location.search).get('email');
+    if (new URLSearchParams(location.search).get('switch') === '1' && switchEmail) {
+      const saved = readAccounts().find(x => x.email.toLowerCase() === switchEmail.toLowerCase());
+      if (saved) showSelectedAccount(saved);
+      else if ($('loginEmail')) $('loginEmail').value = switchEmail;
+    }
     $('accountSearch')?.addEventListener('input', e => renderAccounts(e.target.value.trim()));
     $('accountSearch')?.addEventListener('keydown', e => {
       if (e.key !== 'Enter') return;
