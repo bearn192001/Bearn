@@ -1,4 +1,4 @@
-// Public short route: /p/{slug} -> BEARN Payment Link page.
+// Public short route: /p/{slug} -> /payment.html?type=payment&slug={slug}.
 export async function onRequest({ request, params }) {
   const slug = String(params?.slug || '').trim();
   if (!/^[a-z0-9_-]{3,40}$/i.test(slug)) {
