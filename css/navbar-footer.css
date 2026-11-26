@@ -39,7 +39,7 @@
 .topbar .nav-dropdown{
   position:absolute!important;top:calc(100% + 12px)!important;right:max(calc((100vw - 1200px)/2),clamp(18px,4vw,48px))!important;
   left:auto!important;width:min(330px,calc(100vw - 28px))!important;max-height:min(72vh,580px)!important;
-  overflow:auto!important;overscroll-behavior:contain!important;
+  overflow:auto!important;overscroll-behavior:contain!important;pointer-events:auto!important;z-index:10001!important;
   display:block!important;flex:none!important;padding:12px!important;margin:0!important;
   border:1px solid rgba(222,230,243,.95)!important;border-radius:20px!important;
   background:rgba(255,255,255,.98)!important;box-shadow:0 24px 70px rgba(22,39,77,.18)!important;
