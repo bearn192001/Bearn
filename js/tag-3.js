@@ -1,2 +1,24 @@
-import {param} from '/js/flow-common.js';
-document.addEventListener('DOMContentLoaded',()=>{const b=document.getElementById('completeTag');b?.addEventListener('click',()=>{const slug=param('slug')||'',key='bearn_tags_'+slug;let s={};try{s=JSON.parse(sessionStorage.getItem(key)||'{}')}catch{}s.tag3=true;sessionStorage.setItem(key,JSON.stringify(s));location.href='/final.html?slug='+encodeURIComponent(slug);});});
+import { flowSlug, flowToken, flowRequest } from '/js/flow-session.js';
+
+document.addEventListener('DOMContentLoaded', () => {
+  const slug = flowSlug();
+  const button = document.getElementById('completeTag');
+  const note = document.getElementById('tagMessage');
+  const token = flowToken(slug);
+  if (!token) {
+    button.disabled = true;
+    note.textContent = 'Sesi tidak ditemukan. Kembali ke halaman Go untuk memulai lagi.';
+    return;
+  }
+  button?.addEventListener('click', async () => {
+    button.disabled = true;
+    note.textContent = 'Menyimpan tahap 3…';
+    try {
+      await flowRequest('/api/flow-complete', { token, stage: 3 });
+      location.href = `/final.html?slug=${encodeURIComponent(slug)}`;
+    } catch (error) {
+      note.textContent = error.message;
+      button.disabled = false;
+    }
+  });
+});
