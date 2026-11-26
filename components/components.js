@@ -1,4 +1,13 @@
 export async function loadComponents() {
+  // Shared icon font is required by navbar/footer on every page (not just index).
+  if (!document.querySelector('link[data-bearn-icons], link[href*="font-awesome/6.7.2/css/all.min.css"]')) {
+    const icons = document.createElement('link');
+    icons.rel = 'stylesheet';
+    icons.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css';
+    icons.dataset.bearnIcons = 'true';
+    document.head.appendChild(icons);
+  }
+
   const stylesheet = document.querySelector('link[data-bearn-shared]') || (() => {
     const link = document.createElement('link');
     link.rel = 'stylesheet';
