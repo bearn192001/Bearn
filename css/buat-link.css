@@ -1,4 +1,2 @@
-/* buat-link.html — page-specific styles; shared design in global.css */
-@import url("/css/global.css");
-
-#createLinkForm { max-width: 860px; } .form-grid { align-items: start; }
+@import url('/css/global.css');
+.choice-grid{grid-template-columns:repeat(2,1fr);max-width:900px}.choice-card{padding:28px}.choice-icon{width:48px;height:48px;border-radius:14px;background:#edf1ff;color:var(--brand);display:grid;place-items:center;font-size:24px}@media(max-width:650px){.choice-grid{grid-template-columns:1fr}}

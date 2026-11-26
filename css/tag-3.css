@@ -1,0 +1,2 @@
+@import url('/css/global.css');
+.narrow,.tag-card{max-width:720px;margin-inline:auto}.tag-card{text-align:center}.tag-placeholder{min-height:220px;border:1px dashed #cbd4e8;border-radius:16px;display:grid;place-content:center;background:#fafbff}.progress{height:8px;background:#edf0f6;border-radius:9px;margin:22px 0 10px;overflow:hidden}.progress span{display:block;height:100%;width:100%;background:var(--brand)}

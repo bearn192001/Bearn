@@ -1,0 +1,2 @@
+@import url('/css/global.css');
+.narrow{max-width:720px}.amount{font:800 32px Manrope;margin:18px 0}.summary-row{display:flex;justify-content:space-between;padding:8px 0}.qr-panel{text-align:center;margin-top:24px;padding:20px;background:#f7f8fc;border-radius:16px}.qr-panel img{width:240px;max-width:100%;display:block;margin:16px auto}

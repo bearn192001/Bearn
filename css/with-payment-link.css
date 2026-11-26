@@ -1,0 +1,2 @@
+@import url('/css/global.css');
+.narrow{max-width:620px;min-height:80vh;display:grid;place-items:center}.success-card{text-align:center;padding:42px}.success-mark{width:64px;height:64px;border-radius:50%;background:#e7f8f1;color:#13845e;display:grid;place-items:center;font-size:32px;font-weight:800;margin:0 auto 20px}

@@ -2,3 +2,5 @@
 @import url("/css/global.css");
 
 .table-wrap { overflow-x: auto; } .table { min-width: 680px; }
+
+.table{min-width:850px}.table td:nth-child(4),.table td:nth-child(5){font-variant-numeric:tabular-nums}

@@ -1,0 +1,2 @@
+@import url('/css/global.css');
+.narrow{max-width:820px}.access-option{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:18px 0}.access-option+.access-option{border-top:1px solid var(--line)}.access-option p{max-width:470px;font-size:13px}@media(max-width:600px){.access-option{align-items:flex-start;flex-direction:column}}
