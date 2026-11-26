@@ -1,0 +1,4 @@
+/* index.html — page-specific styles; shared design in global.css */
+@import url("/css/global.css");
+
+.hero { padding-block: clamp(42px,7vw,84px); } .quick-grid { margin-top: 22px; }

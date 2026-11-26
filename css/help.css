@@ -1,0 +1,4 @@
+/* help.html — page-specific styles; shared design in global.css */
+@import url("/css/global.css");
+
+.module-shell { max-width: 900px; }

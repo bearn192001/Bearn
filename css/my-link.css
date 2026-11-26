@@ -1,0 +1,4 @@
+/* my-link.html — page-specific styles; shared design in global.css */
+@import url("/css/global.css");
+
+.table-wrap { overflow-x: auto; } .table { min-width: 680px; }

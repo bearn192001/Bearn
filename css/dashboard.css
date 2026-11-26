@@ -1,0 +1,4 @@
+/* dashboard.html — page-specific styles; shared design in global.css */
+@import url("/css/global.css");
+
+.stats { margin-top: 22px; } .section-head { margin-top: 32px; }

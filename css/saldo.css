@@ -1,0 +1,4 @@
+/* saldo.html — page-specific styles; shared design in global.css */
+@import url("/css/global.css");
+
+.stats { max-width: 920px; }

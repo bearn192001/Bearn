@@ -1,0 +1,4 @@
+/* withdraw.html — page-specific styles; shared design in global.css */
+@import url("/css/global.css");
+
+#withdrawForm { max-width: 860px; }

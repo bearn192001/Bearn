@@ -1,0 +1,4 @@
+/* posts.html — page-specific styles; shared design in global.css */
+@import url("/css/global.css");
+
+.post-grid { align-items: stretch; } .post-card { display:flex; flex-direction:column; } .post-card .actions { margin-top:auto; }
