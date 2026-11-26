@@ -22,3 +22,5 @@
 /tag-3 /tag-3.html 200
 /with-payment-link /with-payment-link.html 200
 /with-auto-link /with-auto-link.html 200
+
+# Public short-link routes are handled by functions/a/[slug].js and functions/p/[slug].js
