@@ -1,1 +1,41 @@
-<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Create Auto Link — BEARN</title><link rel="stylesheet" href="/css/create-auto-link.css"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script type="module" src="/js/create-auto-link.js"></script></head><body data-auth="required"><div data-component="navbar"></div><main class="app"><section class="hero"><span class="eyebrow">AUTO LINK CREATOR</span><h1>Buat Auto Link</h1><p class="muted">Pilih akses gratis melalui tiga tahap atau akses langsung berbayar.</p></section><form id="autoCreateForm" class="card form-card"><div class="form-grid"><div class="field full"><label>Nama Auto Link</label><input name="title" required maxlength="120"></div><div class="field full"><label>URL tujuan</label><input name="destination_url" type="url" required placeholder="https://website-tujuan.com"></div><div class="field full"><label>Metode akses</label><div class="choice-grid"><label class="choice"><input type="radio" name="access_mode" value="free_tags" checked><span><b>Gratis lewat iklan</b><small>Tag 1, Tag 2, Tag 3, lalu Final Check.</small></span></label><label class="choice"><input type="radio" name="access_mode" value="paid_direct"><span><b>Direct Access</b><small>Pengunjung membayar Rp3.500 untuk membuka tujuan.</small></span></label></div></div></div><div class="notice">Direct Access ditetapkan Rp3.500 per pembelian. Pembayaran hanya dianggap berhasil setelah dikonfirmasi webhook gateway.</div><div class="page-actions"><button class="btn" type="submit">Buat Auto Link</button></div><p id="autoCreateMessage" class="muted" role="status"></p></form></main><div data-component="footer"></div></body></html>
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Create Auto Link — BEARN</title>
+  <link rel="stylesheet" href="/css/create-auto-link.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script type="module" src="/js/create-auto-link.js"></script>
+</head>
+<body data-auth="required">
+  <div data-component="navbar"></div>
+  <main class="app">
+    <section class="hero"><span class="eyebrow">AUTO LINK CREATOR</span><h1>Buat Auto Link</h1><p class="muted">Atur judul, tujuan, metode akses, dan keamanan link kamu.</p></section>
+    <form id="autoCreateForm" class="card form-card">
+      <div class="form-grid">
+        <div class="field full"><label for="autoTitle">Judul</label><input id="autoTitle" name="title" required maxlength="120" placeholder="Masukkan judul link"></div>
+        <div class="field full"><label for="destinationUrl">Link tujuan / link asli</label><input id="destinationUrl" name="destination_url" type="url" required placeholder="https://website-tujuan.com"></div>
+        <div class="field full"><label>Metode akses</label><p class="muted help-text">Pilih bagaimana pengunjung membuka link ini.</p>
+          <div class="choice-grid modes">
+            <label class="choice"><input type="radio" name="access_mode" value="instant" checked><span><b>Langsung akses gratis</b><small>Klik link langsung menuju tujuan. Tanpa Tag dan tanpa pembayaran.</small></span></label>
+            <label class="choice"><input type="radio" name="access_mode" value="free_tags"><span><b>Gratis dengan Tag</b><small>Pengunjung melewati Tag 1, Tag 2, Tag 3, lalu Final.</small></span></label>
+            <label class="choice"><input type="radio" name="access_mode" value="paid_direct"><span><b>Langsung akses dengan Payment</b><small>Pengunjung membayar Rp3.500 sebelum mendapatkan akses.</small></span></label>
+            <label class="choice"><input type="radio" name="access_mode" value="choice"><span><b>Aktifkan keduanya</b><small>Di halaman Go, pengunjung memilih Gratis dengan Tag atau langsung berbayar.</small></span></label>
+          </div>
+        </div>
+        <div class="field full password-panel">
+          <label class="switch-row" for="passwordEnabled"><input id="passwordEnabled" name="password_enabled" type="checkbox"><span><b>Gunakan password</b><small>Aktifkan jika link hanya boleh dibuka dengan kata sandi.</small></span></label>
+          <div id="passwordFields" class="password-fields" hidden>
+            <label for="linkPassword">Password link</label><input id="linkPassword" name="link_password" type="password" minlength="6" maxlength="128" autocomplete="new-password" placeholder="Buat password (minimal 6 karakter)">
+            <small class="muted">Password akan diverifikasi sebelum pilihan akses ditampilkan.</small>
+          </div>
+        </div>
+      </div>
+      <div class="notice">Harga akses berbayar ditetapkan Rp3.500. Pembayaran baru dapat dianggap berhasil setelah gateway dan webhook pembayaran dikonfigurasi.</div>
+      <div class="page-actions"><button class="btn" id="createAutoButton" type="submit">Buat Auto Link</button></div>
+      <p id="autoCreateMessage" class="muted" role="status"></p>
+    </form>
+  </main>
+  <div data-component="footer"></div>
+</body>
+</html>
