@@ -1,4 +1,4 @@
-// Public short route: /a/{slug} -> BEARN Auto Link flow.
+// Public short route: /a/{slug} -> /go.html?slug={slug}.
 export async function onRequest({ request, params }) {
   const slug = String(params?.slug || '').trim();
   if (!/^[a-z0-9_-]{3,40}$/i.test(slug)) {
