@@ -10,11 +10,11 @@
 <body data-auth="required">
   <div data-component="navbar"></div>
   <main class="app">
-    <section class="hero"><span class="eyebrow">AUTO LINK CREATOR</span><h1>Buat Auto Link</h1><p class="muted">Atur judul, tujuan, metode akses, dan keamanan link kamu.</p></section>
+    <section class="hero"><span class="eyebrow">AUTO LINK CREATOR</span><h1>Buat Auto Link</h1><p class="muted">Atur judul, tempel teks atau beberapa link, metode akses, dan keamanan link kamu.</p></section>
     <form id="autoCreateForm" class="card form-card">
       <div class="form-grid">
         <div class="field full"><label for="autoTitle">Judul</label><input id="autoTitle" name="title" required maxlength="120" placeholder="Masukkan judul link"></div>
-        <div class="field full"><label for="destinationUrl">Link tujuan / link asli</label><input id="destinationUrl" name="destination_url" type="url" required placeholder="https://website-tujuan.com"></div>
+        <div class="field full"><label for="destinationText">Teks tujuan / tempel link</label><textarea id="destinationText" name="content_text" rows="12" maxlength="30000" required placeholder="Tempel atau tulis seluruh teks di sini. Link seperti https://contoh.com akan otomatis bisa diklik di halaman Auto Link."></textarea><small class="muted">Bisa berisi banyak paragraf dan beberapa link. URL yang diawali https:// atau http:// akan otomatis dibuat menjadi tautan yang bisa diklik.</small></div>
         <div class="field full"><label>Metode akses</label><p class="muted help-text">Pilih bagaimana pengunjung membuka link ini.</p>
           <div class="choice-grid modes">
             <label class="choice"><input type="radio" name="access_mode" value="instant" checked><span><b>Langsung akses gratis</b><small>Klik link langsung menuju tujuan. Tanpa Tag dan tanpa pembayaran.</small></span></label>
