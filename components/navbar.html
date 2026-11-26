@@ -12,20 +12,58 @@
       <span class="menu-label">Menu</span>
     </button>
   </div>
-  <nav id="mainNav" class="nav-dropdown" aria-label="Menu navigasi" hidden>
-    <div class="nav-menu-heading"><span>MENU NAVIGASI</span><span class="nav-menu-dot"></span></div>
+</header>
+<div class="nav-backdrop" id="navBackdrop" hidden></div>
+<nav id="mainNav" class="nav-dropdown" aria-label="Menu navigasi" hidden>
+  <div class="nav-drawer-head">
+    <div><span class="nav-menu-heading">MENU BEARN</span><small class="nav-menu-subtitle">Kelola link dan akunmu</small></div>
+    <button class="nav-close" id="navClose" type="button" aria-label="Tutup menu"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+  </div>
+  <div class="nav-scroll-area">
     <div class="nav-guest" data-guest-only hidden>
-      <a href="/login.html"><i class="fa-solid fa-arrow-right-to-bracket" aria-hidden="true"></i><span>Masuk</span><i class="fa-solid fa-chevron-right nav-chevron" aria-hidden="true"></i></a>
-      <a class="nav-register" href="/register.html"><i class="fa-solid fa-user-plus" aria-hidden="true"></i><span>Daftar Sekarang</span><i class="fa-solid fa-chevron-right nav-chevron" aria-hidden="true"></i></a>
+      <a class="nav-item nav-item-primary" href="/login.html"><i class="fa-solid fa-arrow-right-to-bracket" aria-hidden="true"></i><span>Masuk</span><i class="fa-solid fa-chevron-right nav-chevron" aria-hidden="true"></i></a>
+      <a class="nav-item" href="/register.html"><i class="fa-solid fa-user-plus" aria-hidden="true"></i><span>Daftar akun</span><i class="fa-solid fa-chevron-right nav-chevron" aria-hidden="true"></i></a>
     </div>
     <div class="nav-member" data-member-only hidden>
-      <a href="/index.html"><i class="fa-solid fa-house" aria-hidden="true"></i><span>Beranda</span><i class="fa-solid fa-chevron-right nav-chevron" aria-hidden="true"></i></a>
-      <a href="/dashboard"><i class="fa-solid fa-chart-pie" aria-hidden="true"></i><span>Dashboard</span><i class="fa-solid fa-chevron-right nav-chevron" aria-hidden="true"></i></a>
-      <a href="/my-link"><i class="fa-solid fa-link" aria-hidden="true"></i><span>Link Saya</span><i class="fa-solid fa-chevron-right nav-chevron" aria-hidden="true"></i></a>
-      <a href="/create-auto-link"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i><span>Buat Auto Link</span><i class="fa-solid fa-chevron-right nav-chevron" aria-hidden="true"></i></a>
-      <a href="/create-payment-link"><i class="fa-solid fa-credit-card" aria-hidden="true"></i><span>Buat Payment Link</span><i class="fa-solid fa-chevron-right nav-chevron" aria-hidden="true"></i></a>
-      <a href="/akun.html"><i class="fa-solid fa-user-gear" aria-hidden="true"></i><span>Pengaturan Akun</span><i class="fa-solid fa-chevron-right nav-chevron" aria-hidden="true"></i></a>
-      <button type="button" data-logout><i class="fa-solid fa-arrow-right-from-bracket" aria-hidden="true"></i><span>Keluar</span><i class="fa-solid fa-chevron-right nav-chevron" aria-hidden="true"></i></button>
+      <a class="nav-item" href="/dashboard.html"><i class="fa-solid fa-grid-2" aria-hidden="true"></i><span>Dashboard</span><i class="fa-solid fa-chevron-right nav-chevron" aria-hidden="true"></i></a>
+
+      <section class="nav-accordion">
+        <button class="nav-item nav-accordion-toggle" type="button" aria-expanded="false" aria-controls="createLinkSubmenu">
+          <i class="fa-solid fa-link" aria-hidden="true"></i><span>Create Link</span><i class="fa-solid fa-chevron-down nav-chevron nav-accordion-chevron" aria-hidden="true"></i>
+        </button>
+        <div class="nav-submenu" id="createLinkSubmenu" hidden>
+          <a href="/create-auto-link.html"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i><span>Create Auto Link</span></a>
+          <a href="/create-payment-link.html"><i class="fa-solid fa-credit-card" aria-hidden="true"></i><span>Create Payment Link</span></a>
+        </div>
+      </section>
+
+      <section class="nav-accordion">
+        <button class="nav-item nav-accordion-toggle" type="button" aria-expanded="false" aria-controls="myLinkSubmenu">
+          <i class="fa-solid fa-folder-open" aria-hidden="true"></i><span>My Link</span><i class="fa-solid fa-chevron-down nav-chevron nav-accordion-chevron" aria-hidden="true"></i>
+        </button>
+        <div class="nav-submenu" id="myLinkSubmenu" hidden>
+          <a href="/my-link.html"><i class="fa-solid fa-list" aria-hidden="true"></i><span>Semua Link</span></a>
+          <a href="/my-link.html?type=auto"><i class="fa-solid fa-link" aria-hidden="true"></i><span>Auto Link</span></a>
+          <a href="/my-link.html?type=payment"><i class="fa-solid fa-credit-card" aria-hidden="true"></i><span>Payment Link</span></a>
+        </div>
+      </section>
+
+      <a class="nav-item" href="/saldo.html"><i class="fa-solid fa-wallet" aria-hidden="true"></i><span>Saldo</span><i class="fa-solid fa-chevron-right nav-chevron" aria-hidden="true"></i></a>
+      <a class="nav-item" href="/withdraw.html"><i class="fa-solid fa-money-bill-transfer" aria-hidden="true"></i><span>Withdraw</span><i class="fa-solid fa-chevron-right nav-chevron" aria-hidden="true"></i></a>
+      <a class="nav-item" href="/notifikasi.html"><i class="fa-solid fa-bell" aria-hidden="true"></i><span>Notifikasi</span><i class="fa-solid fa-chevron-right nav-chevron" aria-hidden="true"></i></a>
+      <a class="nav-item" href="/endorse.html"><i class="fa-solid fa-bullhorn" aria-hidden="true"></i><span>Endorse</span><i class="fa-solid fa-chevron-right nav-chevron" aria-hidden="true"></i></a>
+      <a class="nav-item" href="/akun.html"><i class="fa-solid fa-user" aria-hidden="true"></i><span>Profil</span><i class="fa-solid fa-chevron-right nav-chevron" aria-hidden="true"></i></a>
+      <a class="nav-item" href="/pengaturan.html"><i class="fa-solid fa-sliders" aria-hidden="true"></i><span>Pengaturan</span><i class="fa-solid fa-chevron-right nav-chevron" aria-hidden="true"></i></a>
+
+      <section class="nav-accordion nav-switcher" id="navAccountSwitcher" hidden>
+        <button class="nav-item nav-accordion-toggle" type="button" aria-expanded="false" aria-controls="switchAccountSubmenu">
+          <i class="fa-solid fa-users" aria-hidden="true"></i><span>Beralih akun</span><i class="fa-solid fa-chevron-down nav-chevron nav-accordion-chevron" aria-hidden="true"></i>
+        </button>
+        <div class="nav-submenu nav-account-list" id="switchAccountSubmenu" hidden></div>
+      </section>
+
+      <button class="nav-item nav-logout" type="button" data-logout><i class="fa-solid fa-arrow-right-from-bracket" aria-hidden="true"></i><span>Keluar</span><i class="fa-solid fa-chevron-right nav-chevron" aria-hidden="true"></i></button>
     </div>
-  </nav>
-</header>
+  </div>
+  <div class="nav-drawer-foot"><span class="nav-status-dot"></span> BEARN Member Area</div>
+</nav>
