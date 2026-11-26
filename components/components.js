@@ -1,22 +1,31 @@
 export async function loadComponents() {
-  // Load the shared stylesheet once, before the shared HTML is displayed.
-  if (!document.querySelector('link[data-bearn-shared]')) {
-    const stylesheet = document.createElement('link');
-    stylesheet.rel = 'stylesheet';
-    stylesheet.href = '/css/navbar-footer.css';
-    stylesheet.dataset.bearnShared = 'true';
-    document.head.appendChild(stylesheet);
+  const stylesheet = document.querySelector('link[data-bearn-shared]') || (() => {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = '/css/navbar-footer.css';
+    link.dataset.bearnShared = 'true';
+    document.head.appendChild(link);
+    return link;
+  })();
+
+  // Wait until shared styles are ready to prevent an unstyled navbar flash.
+  if (!stylesheet.sheet) {
+    await new Promise(resolve => {
+      stylesheet.addEventListener('load', resolve, {once:true});
+      stylesheet.addEventListener('error', resolve, {once:true});
+    });
   }
 
   for (const host of document.querySelectorAll('[data-component]')) {
     const name = host.dataset.component;
     if (!['navbar', 'footer'].includes(name)) continue;
     try {
-      const response = await fetch(`/components/${name}.html`, { cache: 'no-cache' });
+      const response = await fetch(`/components/${name}.html`, {cache:'no-cache'});
       if (!response.ok) throw new Error(`Gagal memuat ${name}: ${response.status}`);
       host.innerHTML = await response.text();
+      if (name === 'navbar') host.classList.add('bearn-navbar-host');
     } catch (error) {
-      console.error('[BEARN components]', error);
+      console.error(`[BEARN] Komponen ${name} gagal dimuat`, error);
     }
   }
 
@@ -26,35 +35,34 @@ export async function loadComponents() {
 
   const toggle = document.getElementById('menuToggle');
   const menu = document.getElementById('mainNav');
-  if (toggle && menu && !toggle.dataset.bound) {
-    toggle.dataset.bound = '1';
-    const closeMenu = () => {
-      menu.hidden = true;
-      toggle.setAttribute('aria-expanded', 'false');
-      toggle.setAttribute('aria-label', 'Buka menu');
-      toggle.innerHTML = '<i class="fa-solid fa-bars" aria-hidden="true"></i><span>Menu</span>';
-    };
-    toggle.addEventListener('click', event => {
-      event.preventDefault();
-      const opening = menu.hidden;
-      menu.hidden = !opening;
-      toggle.setAttribute('aria-expanded', String(opening));
-      toggle.setAttribute('aria-label', opening ? 'Tutup menu' : 'Buka menu');
-      toggle.innerHTML = opening
-        ? '<i class="fa-solid fa-xmark" aria-hidden="true"></i><span>Tutup</span>'
-        : '<i class="fa-solid fa-bars" aria-hidden="true"></i><span>Menu</span>';
-    });
-    document.addEventListener('click', event => {
-      if (!menu.hidden && !event.target.closest('.topbar')) closeMenu();
-    });
-    document.addEventListener('keydown', event => {
-      if (event.key === 'Escape' && !menu.hidden) {
-        closeMenu();
-        toggle.focus();
-      }
-    });
-    menu.addEventListener('click', event => {
-      if (event.target.closest('a')) closeMenu();
-    });
-  }
+  if (!toggle || !menu || toggle.dataset.bound) return;
+  toggle.dataset.bound = '1';
+
+  const closeMenu = () => {
+    menu.hidden = true;
+    toggle.setAttribute('aria-expanded','false');
+    toggle.setAttribute('aria-label','Buka menu');
+    toggle.querySelector('.menu-icon').innerHTML = '<i class="fa-solid fa-bars" aria-hidden="true"></i>';
+    toggle.querySelector('.menu-label').textContent = 'Menu';
+  };
+  toggle.addEventListener('click', event => {
+    event.preventDefault();
+    const opening = menu.hidden;
+    menu.hidden = !opening;
+    toggle.setAttribute('aria-expanded',String(opening));
+    toggle.setAttribute('aria-label',opening ? 'Tutup menu' : 'Buka menu');
+    toggle.querySelector('.menu-icon').innerHTML = opening
+      ? '<i class="fa-solid fa-xmark" aria-hidden="true"></i>'
+      : '<i class="fa-solid fa-bars" aria-hidden="true"></i>';
+    toggle.querySelector('.menu-label').textContent = opening ? 'Tutup' : 'Menu';
+  });
+  document.addEventListener('click', event => {
+    if (!menu.hidden && !event.target.closest('.topbar')) closeMenu();
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && !menu.hidden) { closeMenu(); toggle.focus(); }
+  });
+  menu.addEventListener('click', event => {
+    if (event.target.closest('a')) closeMenu();
+  });
 }
