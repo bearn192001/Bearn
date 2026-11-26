@@ -23,12 +23,14 @@ document.addEventListener('DOMContentLoaded',async()=>{
     const u=await currentUser(),c=window.BEARN?.client;
     if(!u||!c){message('autoCreateMessage','Login dan koneksi Supabase diperlukan.');return;}
     const d=new FormData(f),mode=String(d.get('access_mode')||'instant');
-    const title=String(d.get('title')||'').trim(),destination=String(d.get('destination_url')||'').trim();
+    const title=String(d.get('title')||'').trim(),content=String(d.get('content_text')||'').trim();
+    const firstUrl=content.match(/https?:\/\/[^\s<>"']+/i)?.[0]?.replace(/[),.;!?]+$/,'')||null;
+    if(!content){message('autoCreateMessage','Teks atau link tujuan wajib diisi.');return;}
     if(!['instant','free_tags','paid_direct','choice'].includes(mode)){message('autoCreateMessage','Pilihan akses tidak valid.');return;}
     if(enabled.checked&&String(password.value).length<6){message('autoCreateMessage','Password minimal 6 karakter.');password.focus();return;}
     submit.disabled=true;submit.textContent='Membuat link…';
     try{
-      const row={user_id:u.id,title,slug:slug(),destination_url:destination,access_mode:mode,price:['paid_direct','choice'].includes(mode)?3500:0,is_published:true,password_enabled:enabled.checked};
+      const row={user_id:u.id,title,slug:slug(),destination_url:firstUrl,content_text:content,access_mode:mode,price:['paid_direct','choice'].includes(mode)?3500:0,is_published:true,password_enabled:enabled.checked};
       if(enabled.checked)Object.assign(row,await makePasswordRecord(password.value));
       let error=null;
       for(let attempt=0;attempt<8;attempt++){
