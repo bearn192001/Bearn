@@ -118,3 +118,36 @@
  .footer-bottom{flex-direction:column!important;gap:8px!important}
 }
 @media(prefers-reduced-motion:reduce){.mobile-menu,.footer-links a{transition:none!important}}
+
+/* Consistent Font Awesome alignment in shared navigation and footer. */
+.topbar i[class^="fa-"], .topbar i[class*=" fa-"],
+.footer i[class^="fa-"], .footer i[class*=" fa-"] {
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  line-height:1!important;
+  vertical-align:middle!important;
+  font-style:normal;
+}
+.footer-link-icon {
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  line-height:1!important;
+  padding:0!important;
+}
+.footer-link-icon i {
+  display:block!important;
+  width:1em!important;
+  height:1em!important;
+  line-height:1!important;
+  margin:0!important;
+  transform:none!important;
+}
+.footer-trust i, .footer-link-arrow {
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  line-height:1!important;
+}
