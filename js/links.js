@@ -19,7 +19,7 @@ export async function loadMyLinks(filter='all'){
  if(sales.error) console.warn('[BEARN My Link] Sales summary unavailable:', sales.error.message);
  const stats=sales.data||[];
  const allRows=[
-  ...(a.data||[]).map(x=>{const st=stats.find(y=>y.link_type==='auto'&&y.link_id===x.id)||{};return {...x,type:'Auto Link',kind:'auto',value:x.access_mode==='paid_direct'?money(x.price||3500):'Gratis',sold:Number(st.paid_count||0),revenue:money(st.creator_total||0),status:x.is_published?'Aktif':'Draft'};}),
+  ...(a.data||[]).map(x=>{const st=stats.find(y=>y.link_type==='auto'&&y.link_id===x.id)||{};return {...x,type:'Auto Link',kind:'auto',value:x.access_mode==='paid_direct'?money(x.price||3500):x.access_mode==='choice'?'Gratis / '+money(x.price||3500):x.access_mode==='instant'?'Langsung gratis':'Gratis dengan Tag',sold:Number(st.paid_count||0),revenue:money(st.creator_total||0),status:x.is_published?'Aktif':'Draft'};}),
   ...(p.data||[]).map(x=>{const st=stats.find(y=>y.link_type==='payment'&&y.link_id===x.id)||{};return {...x,type:'Payment Link',kind:'payment',value:money(x.price),sold:Number(st.paid_count||0),revenue:money(st.creator_total||0),status:x.is_active?'Aktif':'Nonaktif'};})
  ];
  const rows = filter==='auto' || filter==='payment' ? allRows.filter(x=>x.kind===filter) : allRows;
