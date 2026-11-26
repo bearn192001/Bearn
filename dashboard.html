@@ -1,1 +1,110 @@
-<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f5f7fb"><title>Dashboard — BEARN</title><link rel="stylesheet" href="/css/dashboard.css"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script type="module" src="/js/dashboard.js"></script></head><body data-auth="required"><div data-component="navbar"></div><main class="app"><section class="hero"><span class="eyebrow">OVERVIEW</span><h1>Dashboard</h1><p class="muted">Pantau aktivitas link dan ringkasan penghasilanmu.</p></section><section class="grid stats"><div class="card"><div class="stat-label">Saldo Top Up</div><div class="stat-value" id="topupBalance">Rp0</div><div class="stat-note">Untuk transaksi di BEARN</div></div><div class="card"><div class="stat-label">Saldo Penghasilan</div><div class="stat-value" id="earningBalance">Rp0</div><div class="stat-note">Hasil bersih dari link</div></div><div class="card"><div class="stat-label">Auto Link</div><div class="stat-value" id="autoLinkCount">0</div><div class="stat-note">Jumlah Auto Link</div></div><div class="card"><div class="stat-label">Payment Link</div><div class="stat-value" id="paymentLinkCount">0</div><div class="stat-note">Jumlah Payment Link</div></div></section><section class="grid stats sales-stats"><div class="card"><div class="stat-label">Pendapatan Payment Link</div><div class="stat-value" id="paymentLinkRevenue">Rp0</div><div class="stat-note" id="paymentLinkSales">0 transaksi berhasil</div></div><div class="card"><div class="stat-label">Pendapatan Auto Link Direct</div><div class="stat-value" id="autoLinkRevenue">Rp0</div><div class="stat-note" id="autoLinkSales">0 transaksi berhasil</div></div><div class="card"><div class="stat-label">View Auto Link Gratis</div><div class="stat-value" id="autoLinkViewCount">0</div><div class="stat-note">Redirect unik yang berhasil</div></div><div class="card"><div class="stat-label">Pendapatan View Auto Link</div><div class="stat-value" id="autoLinkViewRevenue">Rp0</div><div class="stat-note">Dikreditkan setelah redirect valid</div></div><div class="card"><div class="stat-label">View Gratis Hari Ini</div><div class="stat-value" id="autoLinkViewToday">0</div><div class="stat-note">Pendapatan hari ini: <b id="autoLinkViewRevenueToday">Rp0</b></div></div><div class="card"><div class="stat-label">Dibeli hari ini</div><div class="stat-value" id="salesToday">0</div><div class="stat-note">Transaksi berhasil hari ini</div></div><div class="card"><div class="stat-label">Total terjual</div><div class="stat-value" id="salesTotal">0</div><div class="stat-note">Seluruh transaksi berhasil</div></div></section><section class="section-head"><h2>Akses Cepat</h2></section><section class="grid quick-grid"><a class="card quick-card" href="/create-auto-link.html"><span class="quick-icon">↗</span><span><b>Create Auto Link</b><small>Gratis 3 tag atau Direct Rp3.500</small></span></a><a class="card quick-card" href="/create-payment-link.html"><span class="quick-icon">⌁</span><span><b>Create Payment Link</b><small>Buat tautan pembayaran</small></span></a><a class="card quick-card" href="/my-link.html"><span class="quick-icon">▤</span><span><b>My Link</b><small>Kelola semua link</small></span></a><a class="card quick-card" href="/saldo.html"><span class="quick-icon">◉</span><span><b>Saldo</b><small>Top up dan penghasilan</small></span></a><a class="card quick-card" href="/withdraw.html"><span class="quick-icon">⇧</span><span><b>Withdraw</b><small>Tarik penghasilan</small></span></a></section><section class="section-head"><h2>Informasi BEARN</h2><a href="/pengumuman.html" class="muted">Lihat semua</a></section><div class="card"><b>Selamat datang di BEARN</b><p class="muted">Mulai dengan membuat Auto Link atau Payment Link. Semua link yang dipublikasikan akan tampil di halaman Posts.</p></div></main><div data-component="footer"></div></body></html>
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f5f7fb">
+  <title>Dashboard — BEARN</title>
+  <link rel="stylesheet" href="/css/dashboard.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script type="module" src="/js/dashboard.js"></script>
+</head>
+<body data-auth="required">
+  <div data-component="navbar"></div>
+  <main class="app dashboard-app">
+    <section class="dashboard-hero">
+      <div>
+        <span class="eyebrow">BEARN ANALYTICS</span>
+        <h1>Dashboard</h1>
+        <p class="muted">Pantau performa link, transaksi sukses, dan penghasilan dalam satu tampilan.</p>
+      </div>
+      <div class="last-updated"><span class="live-dot"></span><span id="lastUpdated">Memuat statistik…</span></div>
+    </section>
+
+    <section class="analytics-section" aria-labelledby="autoSectionTitle">
+      <div class="section-heading">
+        <div class="section-heading-icon auto-heading-icon"><i class="fa-solid fa-link" aria-hidden="true"></i></div>
+        <div><span class="section-kicker">LINK MONETIZATION</span><h2 id="autoSectionTitle">Statistik Auto Link</h2><p>Aktivitas link gratis dan Direct Access milikmu.</p></div>
+        <a class="section-action" href="/create-auto-link"><i class="fa-solid fa-plus" aria-hidden="true"></i> Buat Auto Link</a>
+      </div>
+
+      <div class="metric-grid auto-metric-grid">
+        <article class="metric-card metric-blue">
+          <div class="metric-card-top"><span class="metric-icon"><i class="fa-solid fa-link" aria-hidden="true"></i></span><span class="metric-period">TOTAL</span></div>
+          <div class="metric-label">Total Auto Link</div><div class="metric-value" id="autoLinkCount">0</div>
+          <div class="metric-bottom"><span class="trend-chip" id="autoLinkCountTrend">— 0%</span><span>link baru · 7 hari</span></div>
+        </article>
+        <article class="metric-card metric-violet">
+          <div class="metric-card-top"><span class="metric-icon"><i class="fa-solid fa-eye" aria-hidden="true"></i></span><span class="metric-period">TOTAL</span></div>
+          <div class="metric-label">View Gratis Berhasil</div><div class="metric-value" id="autoLinkViewCount">0</div>
+          <div class="metric-bottom"><span class="trend-chip" id="autoLinkViewsTrend">— 0%</span><span>vs 7 hari sebelumnya</span></div>
+        </article>
+        <article class="metric-card metric-amber">
+          <div class="metric-card-top"><span class="metric-icon"><i class="fa-solid fa-bag-shopping" aria-hidden="true"></i></span><span class="metric-period">PAID</span></div>
+          <div class="metric-label">Direct Access Terjual</div><div class="metric-value" id="autoLinkPaidCount">0</div>
+          <div class="metric-bottom"><span class="trend-chip" id="autoLinkSalesTrend">— 0%</span><span>vs 7 hari sebelumnya</span></div>
+        </article>
+        <article class="metric-card metric-green">
+          <div class="metric-card-top"><span class="metric-icon"><i class="fa-solid fa-wallet" aria-hidden="true"></i></span><span class="metric-period">BERSIH</span></div>
+          <div class="metric-label">Total Penghasilan Auto Link</div><div class="metric-value" id="autoLinkTotalRevenue">Rp0</div>
+          <div class="metric-bottom"><span class="trend-chip" id="autoLinkRevenueTrend">— 0%</span><span>vs 7 hari sebelumnya</span></div>
+        </article>
+      </div>
+
+      <section class="trend-panel" aria-label="Grafik tren Auto Link">
+        <div class="trend-panel-head"><div><h3>Performa Auto Link</h3><p>Pergerakan harian selama 7 hari terakhir.</p></div><span class="trend-range"><i class="fa-regular fa-calendar" aria-hidden="true"></i> 7 hari terakhir</span></div>
+        <div class="chart-tabs" role="group" aria-label="Pilih data grafik Auto Link">
+          <button class="chart-tab is-active" type="button" data-chart-group="auto" data-chart-key="views">View</button>
+          <button class="chart-tab" type="button" data-chart-group="auto" data-chart-key="sales">Direct Access</button>
+          <button class="chart-tab" type="button" data-chart-group="auto" data-chart-key="revenue">Penghasilan</button>
+        </div>
+        <div class="chart-summary"><strong id="autoChartTotal">0</strong><span id="autoChartCaption">View valid per hari</span></div>
+        <div id="autoTrendChart" class="trend-chart" role="img" aria-label="Grafik tren Auto Link tujuh hari"></div>
+      </section>
+    </section>
+
+    <section class="analytics-section payment-section" aria-labelledby="paymentSectionTitle">
+      <div class="section-heading">
+        <div class="section-heading-icon payment-heading-icon"><i class="fa-solid fa-credit-card" aria-hidden="true"></i></div>
+        <div><span class="section-kicker">PAYMENT COLLECTION</span><h2 id="paymentSectionTitle">Statistik Payment Link</h2><p>Ringkasan transaksi yang sudah terkonfirmasi.</p></div>
+        <a class="section-action" href="/create-payment-link"><i class="fa-solid fa-plus" aria-hidden="true"></i> Buat Payment Link</a>
+      </div>
+
+      <div class="metric-grid payment-metric-grid">
+        <article class="metric-card metric-cyan">
+          <div class="metric-card-top"><span class="metric-icon"><i class="fa-solid fa-receipt" aria-hidden="true"></i></span><span class="metric-period">PAID</span></div>
+          <div class="metric-label">Transaksi Berhasil</div><div class="metric-value" id="paymentLinkPaidCount">0</div>
+          <div class="metric-bottom"><span class="trend-chip" id="paymentLinkSalesTrend">— 0%</span><span>vs 7 hari sebelumnya</span></div>
+        </article>
+        <article class="metric-card metric-emerald">
+          <div class="metric-card-top"><span class="metric-icon"><i class="fa-solid fa-sack-dollar" aria-hidden="true"></i></span><span class="metric-period">BERSIH</span></div>
+          <div class="metric-label">Total Penghasilan Payment Link</div><div class="metric-value" id="paymentLinkRevenue">Rp0</div>
+          <div class="metric-bottom"><span class="trend-chip" id="paymentLinkRevenueTrend">— 0%</span><span>setelah biaya platform 10%</span></div>
+        </article>
+      </div>
+
+      <section class="trend-panel" aria-label="Grafik tren Payment Link">
+        <div class="trend-panel-head"><div><h3>Performa Payment Link</h3><p>Tren transaksi dan pendapatan bersih harian.</p></div><span class="trend-range"><i class="fa-regular fa-calendar" aria-hidden="true"></i> 7 hari terakhir</span></div>
+        <div class="chart-tabs" role="group" aria-label="Pilih data grafik Payment Link">
+          <button class="chart-tab is-active" type="button" data-chart-group="payment" data-chart-key="sales">Transaksi</button>
+          <button class="chart-tab" type="button" data-chart-group="payment" data-chart-key="revenue">Penghasilan</button>
+        </div>
+        <div class="chart-summary"><strong id="paymentChartTotal">0</strong><span id="paymentChartCaption">Transaksi sukses per hari</span></div>
+        <div id="paymentTrendChart" class="trend-chart" role="img" aria-label="Grafik tren Payment Link tujuh hari"></div>
+      </section>
+    </section>
+
+    <section class="quick-access-section">
+      <div class="section-heading simple-heading"><div><span class="section-kicker">SHORTCUTS</span><h2>Akses Cepat</h2></div></div>
+      <div class="quick-grid">
+        <a class="quick-card" href="/create-auto-link"><span class="quick-icon quick-blue"><i class="fa-solid fa-link" aria-hidden="true"></i></span><span><b>Create Auto Link</b><small>Buat link monetisasi</small></span><i class="fa-solid fa-arrow-up-right-from-square quick-arrow" aria-hidden="true"></i></a>
+        <a class="quick-card" href="/create-payment-link"><span class="quick-icon quick-purple"><i class="fa-solid fa-credit-card" aria-hidden="true"></i></span><span><b>Create Payment Link</b><small>Buat tautan pembayaran</small></span><i class="fa-solid fa-arrow-up-right-from-square quick-arrow" aria-hidden="true"></i></a>
+        <a class="quick-card" href="/my-link"><span class="quick-icon quick-green"><i class="fa-solid fa-folder-open" aria-hidden="true"></i></span><span><b>My Link</b><small>Kelola semua link</small></span><i class="fa-solid fa-arrow-up-right-from-square quick-arrow" aria-hidden="true"></i></a>
+      </div>
+    </section>
+
+    <section class="notice-card"><span class="notice-icon"><i class="fa-solid fa-circle-info" aria-hidden="true"></i></span><div><b>Informasi BEARN</b><p>Penghasilan hanya dihitung dari redirect Auto Link yang berhasil dan transaksi dengan status <strong>paid</strong>. Transaksi pending, gagal, atau kedaluwarsa tidak masuk statistik pendapatan.</p></div><a href="/pengumuman.html">Pengumuman <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></section>
+  </main>
+  <div data-component="footer"></div>
+</body>
+</html>
