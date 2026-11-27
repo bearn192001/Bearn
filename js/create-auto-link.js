@@ -6,7 +6,8 @@ async function makePasswordRecord(password){
   const saltBytes=new Uint8Array(16);crypto.getRandomValues(saltBytes);
   const salt=toHex(saltBytes);
   const key=await crypto.subtle.importKey('raw',new TextEncoder().encode(password),'PBKDF2',false,['deriveBits']);
-  const bits=await crypto.subtle.deriveBits({name:'PBKDF2',salt:saltBytes,iterations:210000,hash:'SHA-256'},key,256);
+  // Cloudflare Workers WebCrypto membatasi PBKDF2 hingga 100.000 iterasi.
+  const bits=await crypto.subtle.deriveBits({name:'PBKDF2',salt:saltBytes,iterations:100000,hash:'SHA-256'},key,256);
   return {password_salt:salt,password_hash:toHex(bits)};
 }
 async function copyText(value){
@@ -89,7 +90,6 @@ document.addEventListener('DOMContentLoaded',async()=>{
     if(!title){message('autoCreateMessage','Judul Auto Link wajib diisi.');return;}
     if(!content){message('autoCreateMessage','Teks atau link tujuan wajib diisi.');return;}
     if(!['instant','free_tags','paid_direct','choice'].includes(mode)){message('autoCreateMessage','Pilihan akses tidak valid.');return;}
-    if(enabled.checked&&String(password.value).length<6){message('autoCreateMessage','Password minimal 6 karakter.');password.focus();return;}
     submit.disabled=true;submit.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Membuat link…';
     try{
       const newSlug=slug();
