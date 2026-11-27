@@ -1,4 +1,4 @@
-import { json, readJson, rpc, sha256, sameOrigin } from '../_lib.js';
+import { json, readJson, rpc, sha256, sameOrigin, verifyAccessToken } from '../_lib.js';
 
 export async function onRequestPost({ request, env }) {
   if (!sameOrigin(request)) return json({ ok: false, message: 'Origin tidak diizinkan.' }, 403);
@@ -6,6 +6,7 @@ export async function onRequestPost({ request, env }) {
     const body = await readJson(request);
     const slug = String(body?.slug || '').trim();
     if (!/^[A-Za-z0-9_-]{3,80}$/.test(slug)) return json({ ok: false, message: 'Slug Auto Link tidak valid.' }, 400);
+    if (!(await verifyAccessToken(env, body?.accessToken, slug))) return json({ ok: false, message: 'Verifikasi akses gagal. Muat ulang halaman Go dan coba lagi.' }, 403);
 
     const bytes = new Uint8Array(32);
     crypto.getRandomValues(bytes);
