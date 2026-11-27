@@ -1,6 +1,6 @@
 import { flowSlug, flowToken } from '/js/flow-session.js';
 
-  const urlPattern = /https?:\/\/[^\s<>"']+/gi;
+function appendLinkedText(container, text) {
   const urlPattern = /https?:\/\/[^\s<>"']+/gi;
   let cursor = 0, match;
   while ((match = urlPattern.exec(text)) !== null) {
@@ -20,6 +20,13 @@ import { flowSlug, flowToken } from '/js/flow-session.js';
   if (cursor < text.length) container.append(document.createTextNode(text.slice(cursor)));
 }
 
+async function readApiJson(response) {
+  const text = await response.text();
+  if (!text) throw new Error(`Server mengirim respons kosong (HTTP ${response.status}).`);
+  try { return JSON.parse(text); }
+  catch { throw new Error(`Respons server tidak valid (HTTP ${response.status}).`); }
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
   const slug = flowSlug(), token = flowToken(slug);
   const message = document.getElementById('accessMessage');
@@ -28,7 +35,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (!token) { message.textContent = 'Sesi akses tidak ditemukan. Silakan mulai kembali dari halaman Go.'; return; }
   try {
     const response = await fetch('/api/auto-content', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ token }), cache: 'no-store' });
-    const result = await response.json();
+    const result = await readApiJson(response);
     if (!response.ok || !result.ok) throw new Error(result.message || 'Verifikasi akses gagal.');
     message.textContent = 'Akses berhasil. Berikut teks dan tautan yang disediakan:';
     appendLinkedText(content, String(result.content_text || ''));
