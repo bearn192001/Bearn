@@ -43,7 +43,12 @@
         </div>
       </div>
       <div class="terms-panel">
-        <label class="terms-check" for="autoTerms"><input id="autoTerms" name="terms_accepted" type="checkbox" required><span><b>Saya menyetujui Syarat dan Ketentuan pembuatan Auto Link.</b><small>Pastikan konten dan tautan yang kamu bagikan aman, benar, dan tidak melanggar hukum maupun hak pihak lain.</small></span></label>
+        <label class="terms-check" for="autoTerms">
+          <input id="autoTerms" name="terms_accepted" type="checkbox" required>
+          <span class="terms-icon" aria-hidden="true"><i class="fa-solid fa-shield-halved"></i></span>
+          <span class="terms-copy"><span class="terms-kicker">KONFIRMASI WAJIB</span><b>Saya menyetujui Syarat dan Ketentuan pembuatan Auto Link.</b><small>Pastikan konten dan tautan yang kamu bagikan aman, benar, dan tidak melanggar hukum maupun hak pihak lain.</small></span>
+          <span class="terms-status" aria-hidden="true"><i class="fa-solid fa-check"></i></span>
+        </label>
       </div>
       <div class="page-actions"><button class="btn create-premium-btn" id="createAutoButton" type="submit"><i class="fa-solid fa-sparkles"></i> Buat Auto Link</button></div>
       <p id="autoCreateMessage" class="muted" role="status" aria-live="polite"></p>
