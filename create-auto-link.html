@@ -4,37 +4,73 @@
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Create Auto Link — BEARN</title>
   <link rel="stylesheet" href="/css/create-auto-link.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script type="module" src="/js/create-auto-link.js"></script>
 </head>
 <body data-auth="required">
   <div data-component="navbar"></div>
-  <main class="app">
-    <section class="hero"><span class="eyebrow">AUTO LINK CREATOR</span><h1>Buat Auto Link</h1><p class="muted">Atur judul, tempel teks atau beberapa link, metode akses, dan keamanan link kamu.</p></section>
-    <form id="autoCreateForm" class="card form-card">
+  <main class="app auto-create-app">
+    <section class="hero auto-hero">
+      <span class="eyebrow"><i class="fa-solid fa-wand-magic-sparkles"></i> BEARN • AUTO LINK STUDIO</span>
+      <h1>Buat Auto Link</h1>
+      <p class="muted">Bangun pengalaman akses yang lebih rapi, fleksibel, dan profesional untuk audiensmu.</p>
+    </section>
+    <form id="autoCreateForm" class="card form-card premium-form">
+      <div class="form-heading"><span class="form-heading-icon"><i class="fa-solid fa-link"></i></span><div><h2>Detail Auto Link</h2><p class="muted">Lengkapi informasi utama sebelum menerbitkan link.</p></div></div>
       <div class="form-grid">
-        <div class="field full"><label for="autoTitle">Judul</label><input id="autoTitle" name="title" required maxlength="120" placeholder="Masukkan judul link"></div>
-        <div class="field full"><label for="destinationText">Teks tujuan / tempel link</label><textarea id="destinationText" name="content_text" rows="12" maxlength="30000" required placeholder="Tempel atau tulis seluruh teks di sini. Link seperti https://contoh.com akan otomatis bisa diklik di halaman Auto Link."></textarea><small class="muted">Bisa berisi banyak paragraf dan beberapa link. URL yang diawali https:// atau http:// akan otomatis dibuat menjadi tautan yang bisa diklik.</small></div>
-        <div class="field full"><label>Metode akses</label><p class="muted help-text">Pilih bagaimana pengunjung membuka link ini.</p>
+        <div class="field full"><label for="autoTitle">Judul Auto Link</label><input id="autoTitle" name="title" required maxlength="120" placeholder="Contoh: Materi dan Link Eksklusif"></div>
+        <div class="field full">
+          <label for="destinationText">Konten dan link tujuan</label>
+          <textarea id="destinationText" name="content_text" rows="12" maxlength="30000" required placeholder="Pastekan Link Mu Sekarang juga."></textarea>
+          <small class="muted">Tempel teks, beberapa paragraf, atau kumpulan link dalam satu kolom.</small>
+        </div>
+        <div class="field full">
+          <div class="field-title"><label>Metode akses</label><span class="field-hint">Pilih alur yang akan dilihat pengunjung.</span></div>
           <div class="choice-grid modes">
-            <label class="choice"><input type="radio" name="access_mode" value="instant" checked><span><b>Langsung akses gratis</b><small>Klik link langsung menuju tujuan. Tanpa Tag dan tanpa pembayaran.</small></span></label>
-            <label class="choice"><input type="radio" name="access_mode" value="free_tags"><span><b>Gratis dengan Tag</b><small>Pengunjung melewati Tag 1, Tag 2, Tag 3, lalu Final.</small></span></label>
-            <label class="choice"><input type="radio" name="access_mode" value="paid_direct"><span><b>Langsung akses dengan Payment</b><small>Pengunjung membayar Rp3.500 sebelum mendapatkan akses.</small></span></label>
-            <label class="choice"><input type="radio" name="access_mode" value="choice"><span><b>Aktifkan keduanya</b><small>Di halaman Go, pengunjung memilih Gratis dengan Tag atau langsung berbayar.</small></span></label>
+            <label class="choice"><input type="radio" name="access_mode" value="instant" checked><span class="choice-icon"><i class="fa-solid fa-bolt"></i></span><span><b>Langsung akses gratis</b><small>Pengunjung langsung membuka konten tanpa Tag dan tanpa pembayaran.</small></span></label>
+            <label class="choice"><input type="radio" name="access_mode" value="free_tags"><span class="choice-icon"><i class="fa-solid fa-layer-group"></i></span><span><b>Gratis dengan Tag</b><small>Pengunjung melewati Tag 1, Tag 2, Tag 3, lalu Final.</small></span></label>
+            <label class="choice"><input type="radio" name="access_mode" value="paid_direct"><span class="choice-icon"><i class="fa-solid fa-credit-card"></i></span><span><b>Langsung akses dengan Payment</b><small>Pengunjung membayar sebelum mendapatkan akses.</small></span></label>
+            <label class="choice"><input type="radio" name="access_mode" value="choice"><span class="choice-icon"><i class="fa-solid fa-shuffle"></i></span><span><b>Aktifkan keduanya</b><small>Pengunjung dapat memilih akses gratis dengan Tag atau akses berbayar.</small></span></label>
           </div>
         </div>
         <div class="field full password-panel">
-          <label class="switch-row" for="passwordEnabled"><input id="passwordEnabled" name="password_enabled" type="checkbox"><span><b>Gunakan password</b><small>Aktifkan jika link hanya boleh dibuka dengan kata sandi.</small></span></label>
+          <label class="switch-row" for="passwordEnabled"><input id="passwordEnabled" name="password_enabled" type="checkbox"><span><b><i class="fa-solid fa-shield-halved"></i> Lindungi dengan password</b><small>Aktifkan jika pengunjung harus memasukkan kata sandi sebelum mengakses link.</small></span></label>
           <div id="passwordFields" class="password-fields" hidden>
             <label for="linkPassword">Password link</label><input id="linkPassword" name="link_password" type="password" minlength="6" maxlength="128" autocomplete="new-password" placeholder="Buat password (minimal 6 karakter)">
-            <small class="muted">Password akan diverifikasi sebelum pilihan akses ditampilkan.</small>
+            <small class="muted">Gunakan minimal 6 karakter. Password akan diminta sebelum pilihan akses ditampilkan.</small>
           </div>
         </div>
       </div>
-      <div class="notice">Harga akses berbayar ditetapkan Rp3.500. Pembayaran baru dapat dianggap berhasil setelah gateway dan webhook pembayaran dikonfigurasi.</div>
-      <div class="page-actions"><button class="btn" id="createAutoButton" type="submit">Buat Auto Link</button></div>
-      <p id="autoCreateMessage" class="muted" role="status"></p>
+      <div class="terms-panel">
+        <label class="terms-check" for="autoTerms"><input id="autoTerms" name="terms_accepted" type="checkbox" required><span><b>Saya menyetujui Syarat dan Ketentuan pembuatan Auto Link.</b><small>Pastikan konten dan tautan yang kamu bagikan aman, benar, dan tidak melanggar hukum maupun hak pihak lain.</small></span></label>
+      </div>
+      <div class="page-actions"><button class="btn create-premium-btn" id="createAutoButton" type="submit"><i class="fa-solid fa-sparkles"></i> Buat Auto Link</button></div>
+      <p id="autoCreateMessage" class="muted" role="status" aria-live="polite"></p>
     </form>
+
+    <section id="createdLinkResult" class="card created-result" hidden aria-live="polite">
+      <div class="result-success"><span><i class="fa-solid fa-check"></i></span><div><span class="eyebrow">PUBLISHED SUCCESSFULLY</span><h2>Auto Link berhasil dibuat!</h2><p class="muted">Link kamu sudah siap dibagikan.</p></div></div>
+      <label for="createdAutoUrl">Link Auto Link kamu</label>
+      <div class="result-url-row"><input id="createdAutoUrl" type="text" readonly><button class="btn" id="copyCreatedUrl" type="button"><i class="fa-regular fa-copy"></i> Salin</button></div>
+      <div class="share-heading"><b>Bagikan ke media sosial</b><span class="muted">Pilih platform untuk membagikan link.</span></div>
+      <div class="social-share-grid">
+        <button type="button" class="social-btn facebook" data-share="facebook"><i class="fa-brands fa-facebook-f"></i><span>Facebook</span></button>
+        <button type="button" class="social-btn whatsapp" data-share="whatsapp"><i class="fa-brands fa-whatsapp"></i><span>WhatsApp</span></button>
+        <button type="button" class="social-btn telegram" data-share="telegram"><i class="fa-brands fa-telegram"></i><span>Telegram</span></button>
+        <button type="button" class="social-btn x-social" data-share="x"><i class="fa-brands fa-x-twitter"></i><span>X</span></button>
+        <button type="button" class="social-btn linkedin" data-share="linkedin"><i class="fa-brands fa-linkedin-in"></i><span>LinkedIn</span></button>
+        <button type="button" class="social-btn pinterest" data-share="pinterest"><i class="fa-brands fa-pinterest-p"></i><span>Pinterest</span></button>
+        <button type="button" class="social-btn reddit" data-share="reddit"><i class="fa-brands fa-reddit-alien"></i><span>Reddit</span></button>
+        <button type="button" class="social-btn email-share" data-share="email"><i class="fa-solid fa-envelope"></i><span>Email</span></button>
+        <button type="button" class="social-btn instagram" data-share="instagram"><i class="fa-brands fa-instagram"></i><span>Instagram</span></button>
+        <button type="button" class="social-btn youtube" data-share="youtube"><i class="fa-brands fa-youtube"></i><span>YouTube</span></button>
+        <button type="button" class="social-btn native-share" data-share="native"><i class="fa-solid fa-arrow-up-from-bracket"></i><span>Lainnya</span></button>
+      </div>
+      <p class="share-note muted">Instagram dan YouTube tidak menyediakan tautan berbagi web universal. Tombolnya akan menyalin link agar bisa kamu tempel pada profil, deskripsi, atau postingan.</p>
+      <div class="result-footer"><a class="btn secondary" href="/my-link?type=auto"><i class="fa-solid fa-list"></i> Lihat Auto Link Saya</a><button class="btn ghost" id="createAnotherAuto" type="button"><i class="fa-solid fa-plus"></i> Buat lagi</button></div>
+      <p id="shareMessage" class="muted" role="status"></p>
+    </section>
   </main>
   <div data-component="footer"></div>
 </body>
