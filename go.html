@@ -15,61 +15,64 @@
     <section class="hero">
       <span class="eyebrow">BEARN GO</span>
       <h1 id="goTitle">Membuka Auto Link</h1>
-      <p class="muted" id="goSubtitle">Verifikasi akses untuk melanjutkan.</p>
+      <p class="muted" id="goSubtitle">Memeriksa akses link Anda…</p>
     </section>
 
-    <section class="endorse-slot" data-endorse-slot="top" aria-label="Endorse pilihan"></section>
+    <section class="endorse-form" data-endorse-slot="top" aria-label="Area promosi pertama"></section>
 
-    <section class="card password-card" id="passwordCard" hidden>
-      <form id="passwordForm">
-        <div class="field">
-          <label for="goPassword">Password link</label>
-          <input id="goPassword" type="password" required autocomplete="current-password" placeholder="Masukkan password">
+    <section class="password-form-panel" id="passwordCard" hidden>
+      <div class="form-heading">
+        <span class="form-kicker">VERIFIKASI LINK</span>
+        <h2>Link ini dilindungi password</h2>
+        <p>Masukkan password yang diberikan pemilik link untuk melanjutkan.</p>
+      </div>
+      <form id="passwordForm" novalidate>
+        <label for="goPassword">Password link</label>
+        <div class="password-input-row">
+          <input id="goPassword" type="password" autocomplete="current-password" placeholder="Masukkan password" required>
+          <button class="btn password-submit" type="submit">Buka Link</button>
         </div>
-        <button class="btn" type="submit">Buka Link</button>
-        <p id="passwordMessage" class="muted" role="status"></p>
+        <p id="passwordMessage" class="password-feedback" role="status" aria-live="polite"></p>
       </form>
     </section>
 
-    <section class="access-stack" id="accessCard" hidden aria-label="Pilihan akses Auto Link">
-      <div class="card access-card access-option" id="instantOption" hidden>
-        <div class="access-copy">
-          <span class="pill">GRATIS</span>
-          <h2>Langsung Akses</h2>
-          <p class="muted">Lanjut langsung ke tujuan tanpa melewati tahapan tambahan.</p>
-        </div>
-        <a class="btn" id="instantStart" href="#">Lanjut Langsung Akses</a>
+    <section class="access-option access-paid" id="paidOption" hidden aria-label="Akses langsung berbayar">
+      <div class="access-copy">
+        <span class="access-kicker">AKSES PRIORITAS</span>
+        <h2>Langsung Akses</h2>
+        <p>Buka tujuan secara langsung dengan pembayaran satu kali.</p>
       </div>
-
-      <section class="endorse-slot" data-endorse-slot="middle" aria-label="Slot promosi kedua"></section>
-
-      <div class="card access-card access-option" id="freeOption" hidden>
-        <div class="access-copy">
-          <span class="pill">FREE ACCESS</span>
-          <h2>Lanjut dengan Free</h2>
-          <p class="muted">Selesaikan Tag 1, Tag 2, dan Tag 3 sebelum Final Check untuk membuka tujuan.</p>
-        </div>
-        <a class="btn secondary" id="freeStart" href="#">Lanjut dengan Free</a>
-      </div>
-
-      <section class="endorse-slot" data-endorse-slot="bottom" aria-label="Slot promosi ketiga"></section>
-
-      <div class="card access-card access-option paid-option" id="paidOption" hidden>
-        <div class="access-copy">
-          <span class="pill">PAID ACCESS</span>
-          <h2>Langsung Akses Berbayar</h2>
-          <p class="muted">Pilih akses berbayar untuk mendapatkan akses langsung.</p>
-        </div>
-        <a class="btn" id="paidStart" href="#">Bayar Rp3.500</a>
-      </div>
+      <a class="btn access-button" id="paidStart" href="/payment.html?type=auto">Lanjut Langsung Akses <strong>Rp3.500</strong></a>
     </section>
+
+    <section class="endorse-form" data-endorse-slot="middle" aria-label="Area promosi kedua"></section>
+
+    <section class="access-option access-free" id="freeOption" hidden aria-label="Akses gratis">
+      <div class="access-copy">
+        <span class="access-kicker">GRATIS</span>
+        <h2>Lanjut dengan Free</h2>
+        <p>Selesaikan tahapan Tag 1, Tag 2, dan Tag 3 untuk membuka tujuan tanpa pembayaran.</p>
+      </div>
+      <a class="btn access-button" id="freeStart" href="#">Lanjutkan dengan Free</a>
+    </section>
+
+    <section class="access-option access-instant" id="instantOption" hidden aria-label="Akses langsung">
+      <div class="access-copy">
+        <span class="access-kicker">AKSES LANGSUNG</span>
+        <h2>Buka Tujuan Sekarang</h2>
+        <p>Lanjut langsung ke tujuan tanpa tahapan tambahan.</p>
+      </div>
+      <a class="btn access-button" id="instantStart" href="#">Lanjut Langsung Akses</a>
+    </section>
+
+    <section class="endorse-form" data-endorse-slot="bottom" aria-label="Area promosi ketiga"></section>
 
     <section class="join-banner">
       <span class="join-icon" aria-hidden="true">✦</span>
       <div>
         <span class="eyebrow">GABUNG BEARN</span>
         <h2>Bangun penghasilan dari Auto Link Anda</h2>
-        <p>Buat dan bagikan link Anda. Semakin banyak pengunjung valid yang menyelesaikan akses, semakin besar peluang pendapatan Anda. Penarikan dapat diajukan sesuai ketentuan BEARN.</p>
+        <p>Buat dan bagikan link Anda. Dapatkan peluang penghasilan dari pengunjung valid dan ajukan penarikan sesuai ketentuan BEARN.</p>
         <a class="btn join-btn" href="/register.html">Gabung BEARN Sekarang</a>
       </div>
     </section>
