@@ -1,116 +1,147 @@
 import { init } from '/js/core.js';
 import { param, message, money } from '/js/flow-common.js';
 
-const byId = id => document.getElementById(id);
-const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+const $ = (id) => document.getElementById(id);
+const AUTO_AMOUNT = 3500;
+let activePaymentId = '';
+let statusTimer = null;
+let statusBusy = false;
+let redirecting = false;
 
 async function readJson(response) {
-  const raw = await response.text();
-  try { return JSON.parse(raw); }
+  const text = await response.text();
+  if (!text) throw new Error(`Server mengirim respons kosong (HTTP ${response.status}).`);
+  try { return JSON.parse(text); }
   catch { throw new Error(`Respons server tidak valid (HTTP ${response.status}).`); }
 }
 
-function show(el) { if (el) el.hidden = false; }
-function hide(el) { if (el) el.hidden = true; }
-
-async function initAutoCheckout(slug) {
-  show(byId('autoCheckout'));
-  const startButton = byId('startPremiumPayment');
-  const initial = byId('autoCheckout');
-  const processing = byId('paymentProcessing');
-  const qris = byId('qrisCheckout');
-  const statusMessage = byId('qrisMessage');
-  let orderId = null, statusTimer = null, checking = false;
-
-  async function checkStatus(manual = false) {
-    if (!orderId || checking) return;
-    checking = true;
-    const button = byId('checkPayment');
-    if (button && manual) { button.disabled = true; button.textContent = 'Memeriksa…'; }
-    try {
-      const response = await fetch('/api/payment-status', {
-        method: 'POST', headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ orderId }), cache: 'no-store'
-      });
-      const result = await readJson(response);
-      if (!response.ok || !result.ok) throw new Error(result.message || 'Status pembayaran belum dapat diperiksa.');
-      if (result.status === 'paid') {
-        if (statusTimer) clearInterval(statusTimer);
-        byId('autoCheckText').textContent = 'Pembayaran berhasil. Mengalihkan…';
-        byId('qrisExpiry').textContent = 'Pembayaran berhasil diverifikasi.';
-        await sleep(700);
-        if (result.redirectUrl && new URL(result.redirectUrl, location.origin).origin === location.origin) location.replace(result.redirectUrl);
-        else location.replace(`/api/auto-redirect?slug=${encodeURIComponent(slug)}&order=${encodeURIComponent(orderId)}`);
-      } else if (['expired', 'failed', 'cancelled'].includes(result.status)) {
-        if (statusTimer) clearInterval(statusTimer);
-        message('qrisMessage', 'Transaksi sudah tidak aktif. Silakan muat ulang halaman untuk mencoba kembali.');
-      } else {
-        byId('autoCheckText').textContent = 'Belum terdeteksi. Halaman akan memeriksa kembali otomatis.';
-        if (manual) message('qrisMessage', 'Pembayaran belum terdeteksi. Pastikan nominal dan transaksi sudah benar.');
-      }
-    } catch (error) { if (manual) message('qrisMessage', error.message || 'Gagal memeriksa pembayaran.'); }
-    finally { checking = false; if (button && manual) { button.disabled = false; button.textContent = '↻ Cek Pembayaran'; } }
-  }
-
-  startButton.addEventListener('click', async () => {
-    startButton.disabled = true;
-    hide(initial); show(processing);
-    for (let n = 3; n >= 1; n--) { byId('processingCountdown').textContent = String(n); await sleep(1000); }
-    try {
-      const response = await fetch('/api/payment-create', {
-        method: 'POST', headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ type: 'auto', slug, amount: 3500 }), cache: 'no-store'
-      });
-      const result = await readJson(response);
-      if (!response.ok || !result.ok) throw new Error(result.message || 'Gateway pembayaran belum tersedia.');
-      if (!result.orderId || !result.qrImageUrl) throw new Error('Gateway tidak mengirim data QRIS yang valid.');
-      orderId = String(result.orderId);
-      const qrUrl = new URL(result.qrImageUrl, location.origin);
-      if (!['https:', 'http:'].includes(qrUrl.protocol)) throw new Error('Alamat QRIS tidak valid.');
-      byId('paymentQr').src = qrUrl.href;
-      hide(processing); show(qris); show(byId('qrisVisual'));
-      hide(byId('qrisUnavailable'));
-      if (result.expiresAt) byId('qrisExpiry').textContent = `Berlaku sampai ${new Date(result.expiresAt).toLocaleString('id-ID')}`;
-      byId('checkPayment').addEventListener('click', () => checkStatus(true));
-      statusTimer = setInterval(() => checkStatus(false), 5000);
-      checkStatus(false);
-    } catch (error) {
-      hide(processing); show(qris); show(byId('qrisUnavailable'));
-      byId('qrisExpiry').textContent = 'Transaksi belum dibuat';
-      message('qrisMessage', error.message || 'QRIS belum tersedia.');
-      startButton.disabled = false;
-    }
-  });
+function showAutoPanel(panel) {
+  ['prePayment', 'processingPanel', 'qrisPanel', 'paidPanel'].forEach(id => { $(id).hidden = id !== panel; });
+}
+function showAutoError(error) {
+  $('autoPaymentError').textContent = error?.message || 'Pembayaran tidak dapat diproses. Silakan coba kembali.';
+  $('autoPaymentError').hidden = false;
+  if (statusTimer) clearInterval(statusTimer);
+  $('startAutoPayment').disabled = false;
+  $('startAutoPayment').textContent = 'Coba Buat QRIS Lagi';
+  showAutoPanel('prePayment');
+}
+function stopStatusPolling() {
+  if (statusTimer) clearInterval(statusTimer);
+  statusTimer = null;
 }
 
-async function initRegularCheckout(type, slug) {
-  show(byId('regularCheckout'));
-  const client = window.BEARN?.client;
-  if (!client || !slug || !['auto', 'payment'].includes(type)) { message('paymentMessage', 'Detail pembayaran tidak valid.'); return; }
+async function createAutoPayment(slug) {
+  const response = await fetch('/api/auto-link-payment-create', {
+    method: 'POST', headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ slug }), cache: 'no-store'
+  });
+  const result = await readJson(response);
+  if (!response.ok || !result.ok) throw new Error(result.message || 'Gagal membuat QRIS.');
+  if (!result.paymentId || !result.qrUrl) throw new Error('Cashi belum mengirim gambar QRIS. Silakan coba lagi.');
+  return result;
+}
+
+async function checkAutoPayment(manual = false) {
+  if (!activePaymentId || statusBusy || redirecting) return;
+  statusBusy = true;
+  const button = $('checkPayment');
+  if (manual) { button.disabled = true; button.textContent = 'Memeriksa pembayaran…'; }
+  try {
+    const response = await fetch('/api/auto-link-payment-status', {
+      method: 'POST', headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ paymentId: activePaymentId }), cache: 'no-store'
+    });
+    const result = await readJson(response);
+    if (!response.ok || !result.ok) throw new Error(result.message || 'Belum dapat memeriksa status pembayaran.');
+    if (result.status === 'paid') {
+      redirecting = true; stopStatusPolling(); showAutoPanel('paidPanel');
+      $('paymentMessage').textContent = 'Pembayaran terverifikasi. Mengalihkan…';
+      setTimeout(() => { location.replace(`/with-auto-link.html?paid=${encodeURIComponent(activePaymentId)}&slug=${encodeURIComponent(param('slug') || '')}`); }, 1400);
+    } else if (result.status === 'expired' || result.status === 'failed') {
+      stopStatusPolling(); throw new Error('QRIS sudah kedaluwarsa atau transaksi gagal. Silakan buat QRIS baru.');
+    } else {
+      $('autoCheckText').textContent = manual ? 'Pembayaran belum terdeteksi. Kami akan memeriksa kembali otomatis.' : 'Belum terdeteksi. Pengecekan otomatis tetap berjalan…';
+      if (manual) $('paymentMessage').textContent = 'Pembayaran belum terdeteksi. Pastikan nominal sudah dibayar dan tunggu beberapa saat.';
+    }
+  } catch (error) {
+    $('paymentMessage').textContent = error.message || 'Pengecekan gagal. Sistem akan mencoba kembali.';
+  } finally {
+    statusBusy = false;
+    if (manual && button) { button.disabled = false; button.textContent = '↻  Cek Pembayaran'; }
+  }
+}
+
+async function initAutoCheckout(slug) {
+  $('autoCheckout').hidden = false;
+  $('legacyCheckout').hidden = true;
+  $('startAutoPayment').addEventListener('click', async () => {
+    if ($('startAutoPayment').disabled) return;
+    $('startAutoPayment').disabled = true;
+    showAutoPanel('processingPanel');
+    let remaining = 3;
+    $('processingCount').textContent = remaining;
+    const countdown = setInterval(() => {
+      remaining -= 1;
+      $('processingCount').textContent = Math.max(remaining, 0);
+      if (remaining <= 0) clearInterval(countdown);
+    }, 1000);
+    try {
+      const [payment] = await Promise.all([
+        createAutoPayment(slug),
+        new Promise(resolve => setTimeout(resolve, 3000))
+      ]);
+      activePaymentId = payment.paymentId;
+      $('qrisAmount').textContent = money(AUTO_AMOUNT);
+      $('paymentOrderId').textContent = payment.orderId || payment.paymentId;
+      $('paymentQr').src = payment.qrUrl;
+      $('paymentQr').hidden = false;
+      $('qrFallback').hidden = true;
+      $('paymentQr').onerror = () => { $('paymentQr').hidden = true; $('qrFallback').hidden = false; };
+      showAutoPanel('qrisPanel');
+      $('autoCheckText').textContent = 'Memeriksa pembayaran secara berkala…';
+      statusTimer = setInterval(() => checkAutoPayment(false), 5000);
+      checkAutoPayment(false);
+    } catch (error) {
+      clearInterval(countdown);
+      showAutoError(error);
+    }
+  });
+  $('checkPayment').addEventListener('click', () => checkAutoPayment(true));
+}
+
+async function initLegacyPayment(type, slug, client) {
+  $('autoCheckout').hidden = true;
+  $('legacyCheckout').hidden = false;
+  if (!client || !slug || !['auto', 'payment'].includes(type)) {
+    message('legacyPaymentMessage', 'Detail pembayaran tidak valid.'); return;
+  }
   const table = type === 'auto' ? 'auto_links' : 'payment_links';
   const columns = type === 'auto' ? 'title,slug,price,access_mode,is_published' : 'title,slug,price,description,is_active';
   const { data, error } = await client.from(table).select(columns).eq('slug', slug).maybeSingle();
   if (error || !data || (type === 'auto' && !data.is_published) || (type === 'payment' && !data.is_active)) {
-    message('paymentMessage', 'Link pembayaran tidak ditemukan atau sudah tidak aktif.'); return;
+    message('legacyPaymentMessage', 'Link pembayaran tidak ditemukan atau sudah tidak aktif.'); return;
   }
-  const amount = type === 'auto' ? 3500 : Number(data.price);
+  const amount = type === 'auto' ? AUTO_AMOUNT : Number(data.price);
   const fee = type === 'auto' ? 1500 : Math.round(amount * 0.10);
   const net = type === 'auto' ? 2000 : amount - fee;
-  byId('checkoutType').textContent = type === 'auto' ? 'AUTO LINK DIRECT' : 'PAYMENT LINK';
-  byId('checkoutTitle').textContent = data.title;
-  byId('checkoutDescription').textContent = data.description || '';
-  byId('checkoutAmount').textContent = money(amount);
-  byId('checkoutFeeLabel').textContent = type === 'auto' ? 'Biaya BEARN' : 'Biaya platform (10%)';
-  byId('checkoutFee').textContent = money(fee);
-  byId('checkoutCreatorNet').textContent = money(net);
-  byId('checkoutTotal').textContent = money(amount);
-  message('paymentMessage', 'Gateway pembayaran belum dikonfigurasi. Status lunas hanya boleh ditetapkan setelah verifikasi server dari penyedia pembayaran.');
+  $('checkoutType').textContent = type === 'auto' ? 'AUTO LINK DIRECT' : 'PAYMENT LINK';
+  $('checkoutTitle').textContent = data.title;
+  $('checkoutDescription').textContent = data.description || '';
+  $('checkoutAmount').textContent = money(amount);
+  $('checkoutFeeLabel').textContent = type === 'auto' ? 'Biaya BEARN' : 'Biaya platform (10%)';
+  $('checkoutFee').textContent = money(fee);
+  $('checkoutCreatorNet').textContent = money(net);
+  $('checkoutTotal').textContent = money(amount);
+  $('paymentUnavailable').textContent = 'Pembayaran otomatis untuk jenis link ini belum diaktifkan.';
+  message('legacyPaymentMessage', 'Status lunas hanya boleh dicatat setelah diverifikasi oleh server pembayaran.');
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
   await init();
   const type = param('type');
   const slug = param('slug');
+  const client = window.BEARN?.client;
   if (type === 'auto' && slug) await initAutoCheckout(slug);
-  else await initRegularCheckout(type, slug);
+  else await initLegacyPayment(type, slug, client);
 });

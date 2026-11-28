@@ -27,13 +27,37 @@ async function readApiJson(response) {
   catch { throw new Error(`Respons server tidak valid (HTTP ${response.status}).`); }
 }
 
+async function showPaidAutoLink(paymentId, slug, message, content, button) {
+  const response = await fetch('/api/auto-link-payment-access', {
+    method: 'POST', headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ paymentId }), cache: 'no-store'
+  });
+  const result = await readApiJson(response);
+  if (!response.ok || !result.ok) throw new Error(result.message || 'Pembayaran belum terverifikasi.');
+  if (result.slug !== slug) throw new Error('Auto Link tidak cocok dengan transaksi pembayaran.');
+  document.title = `${result.title || 'Auto Link'} — BEARN`;
+  message.textContent = 'Pembayaran Rp3.500 terverifikasi. Akses Auto Link berhasil dibuka:';
+  appendLinkedText(content, String(result.content_text || ''));
+  content.hidden = false;
+  if (result.destination_url) {
+    button.href = result.destination_url; button.target = '_blank'; button.rel = 'noopener noreferrer'; button.hidden = false;
+  }
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
-  const slug = flowSlug(), token = flowToken(slug);
+  const params = new URLSearchParams(location.search);
+  const paidPaymentId = params.get('paid');
+  const slug = params.get('slug') || flowSlug();
+  const token = flowToken(slug);
   const message = document.getElementById('accessMessage');
   const content = document.getElementById('autoLinkContent');
   const button = document.getElementById('openDestination');
-  if (!token) { message.textContent = 'Sesi akses tidak ditemukan. Silakan mulai kembali dari halaman Go.'; return; }
   try {
+    if (paidPaymentId) {
+      await showPaidAutoLink(paidPaymentId, slug, message, content, button);
+      return;
+    }
+    if (!token) { message.textContent = 'Sesi akses tidak ditemukan. Silakan mulai kembali dari halaman Go.'; return; }
     const response = await fetch('/api/auto-content', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ token }), cache: 'no-store' });
     const result = await readApiJson(response);
     if (!response.ok || !result.ok) throw new Error(result.message || 'Verifikasi akses gagal.');
