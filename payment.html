@@ -1,1 +1,80 @@
-<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pembayaran — BEARN</title><link rel="stylesheet" href="/css/payment.css"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script type="module" src="/js/payment.js"></script></head><body><div data-component="navbar"></div><main class="app narrow"><section class="hero"><span class="eyebrow">SECURE CHECKOUT</span><h1>Pembayaran</h1><p class="muted">Periksa detail pembayaranmu.</p></section><section class="card"><span id="checkoutType" class="pill">LINK</span><h2 id="checkoutTitle">Memuat detail…</h2><p id="checkoutDescription" class="muted"></p><div class="amount" id="checkoutAmount">—</div><div class="summary-row"><span id="checkoutFeeLabel">Potongan platform</span><b id="checkoutFee">—</b></div><div class="summary-row"><span>Penghasilan pemilik link</span><b id="checkoutCreatorNet">—</b></div><div class="summary-row"><span>Total pembayaran</span><b id="checkoutTotal">—</b></div><div id="qrPanel" class="qr-panel hidden"><h3>Scan QR pembayaran</h3><img id="paymentQr" alt="QR pembayaran"><p id="paymentInstructions"></p><button id="checkPayment" class="btn secondary" type="button">Periksa status pembayaran</button></div><div id="paymentUnavailable" class="notice">Gateway DANA belum dikonfigurasi. Pembayaran belum dapat dilakukan.</div><p id="paymentMessage" class="muted" role="status"></p></section></main><div data-component="footer"></div></body></html>
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f5f8ff">
+  <title>Pembayaran Akses Premium — BEARN</title>
+  <link rel="stylesheet" href="/css/payment.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script type="module" src="/js/payment.js"></script>
+</head>
+<body>
+  <div data-component="navbar"></div>
+  <main class="app payment-app">
+    <section id="autoCheckout" class="auto-checkout" hidden>
+      <a class="promo-link" href="/" aria-label="Kembali ke halaman utama BEARN">
+        <img class="promo-banner" src="/assets/bearn-payment-banner.webp" alt="BEARN — Dapatkan penghasilan tambahan dan pembayaran akses premium Rp3.500">
+      </a>
+      <section class="checkout-action card">
+        <div class="secure-line"><span class="secure-dot"></span> PEMBAYARAN AMAN · BEARN PREMIUM</div>
+        <p class="checkout-kicker">PEMBAYARAN AKSES PREMIUM</p>
+        <div class="checkout-price">Rp3.500</div>
+        <p class="checkout-caption">Akses langsung ke semua fitur BEARN</p>
+        <button id="startPremiumPayment" class="btn pay-now" type="button">
+          <span class="pay-icon">▣</span><span>Bayar Sekarang</span><span aria-hidden="true">→</span>
+        </button>
+        <p class="checkout-trust"><span>✓</span> Proses aman &nbsp;·&nbsp; <span>✓</span> Verifikasi otomatis</p>
+      </section>
+      <a class="guide-link" href="https://whatsapp.com/channel/0029Vb8bHHqGZNCnJhHlma1c" target="_blank" rel="noopener noreferrer" aria-label="Tonton video panduan di channel WhatsApp BEARN">
+        <video class="guide-video" src="/assets/bearn-payment-guide.mp4" controls playsinline preload="metadata" poster="/assets/bearn-payment-banner.webp"></video>
+        <span class="guide-caption"><b>▶ Tonton Video Panduan</b><small>Pelajari cara menggunakan fitur BEARN dengan mudah dan benar. Ketuk video untuk membuka channel WhatsApp resmi.</small></span>
+      </a>
+      <p id="autoPaymentMessage" class="payment-message" role="status" aria-live="polite"></p>
+    </section>
+
+    <section id="paymentProcessing" class="card processing-card" hidden aria-live="polite">
+      <div class="processing-orbit"><span></span></div>
+      <p class="eyebrow">SECURE CHECKOUT</p>
+      <h1>Menyiapkan pembayaran</h1>
+      <p class="muted">Mohon tunggu, kami sedang menyiapkan instruksi pembayaran aman.</p>
+      <div class="progress-track"><span></span></div>
+      <strong id="processingCountdown">3</strong>
+      <small>Jangan tutup halaman ini.</small>
+    </section>
+
+    <section id="qrisCheckout" class="card qris-card" hidden>
+      <div class="qris-heading"><span class="secure-dot"></span><div><b>Pembayaran QRIS</b><small>BEARN · Secure payment</small></div><span class="qris-badge">QRIS</span></div>
+      <div class="qris-amount-label">TOTAL PEMBAYARAN</div>
+      <div class="qris-amount">Rp3.500</div>
+      <div class="qris-expiry" id="qrisExpiry">Selesaikan pembayaran sesuai instruksi.</div>
+      <div id="qrisUnavailable" class="gateway-warning" hidden>
+        <b>QRIS belum dapat dibuat</b>
+        <p>Gateway pembayaran BEARN belum dikonfigurasi. Tidak ada QR atau transaksi yang dibuat. Silakan hubungi admin atau coba kembali setelah layanan pembayaran aktif.</p>
+      </div>
+      <div id="qrisVisual" hidden>
+        <div class="qris-frame"><img id="paymentQr" alt="QRIS pembayaran BEARN"><span>SCAN ME</span></div>
+        <p class="qris-hint">Buka aplikasi bank atau e-wallet, lalu scan QRIS di atas.</p>
+        <div class="auto-check"><span class="pulse-dot"></span><div><b>Pengecekan otomatis</b><small id="autoCheckText">Menunggu pembayaran terdeteksi…</small></div></div>
+        <button id="checkPayment" class="btn check-payment" type="button">↻ Cek Pembayaran</button>
+      </div>
+      <div class="ticker-section"><b>Transfer melalui bank</b><div class="ticker ticker-left"><div class="ticker-track bank-track"><span>BCA</span><span>BRI</span><span>BNI</span><span>Mandiri</span><span>BTN</span><span>BSI</span><span>CIMB Niaga</span><span>PermataBank</span><span>Danamon</span><span>Bank Jago</span><span>BCA</span><span>BRI</span><span>BNI</span><span>Mandiri</span><span>BTN</span><span>BSI</span><span>CIMB Niaga</span><span>PermataBank</span><span>Danamon</span><span>Bank Jago</span></div></div></div>
+      <div class="ticker-section"><b>Atau gunakan e-wallet</b><div class="ticker ticker-right"><div class="ticker-track wallet-track"><span>DANA</span><span>OVO</span><span>GoPay</span><span>ShopeePay</span><span>LinkAja</span><span>Jago</span><span>DANA</span><span>OVO</span><span>GoPay</span><span>ShopeePay</span><span>LinkAja</span><span>Jago</span></div></div></div>
+      <section class="howto"><h3>⚡ Cara melakukan pembayaran</h3><ol>
+        <li><b>Screenshot</b> layar ini atau QRIS yang ditampilkan.</li>
+        <li>Buka aplikasi bank atau e-wallet kamu, lalu pilih menu <b>Scan / Bayar QRIS</b>.</li>
+        <li>Pilih opsi <b>Upload dari galeri</b> atau ikon gambar/foto, kemudian unggah screenshot QRIS tadi.</li>
+        <li>Periksa nominal <b>Rp3.500</b>, lalu selesaikan pembayaran.</li>
+        <li>Tunggu pembayaran berhasil. Kembali ke halaman BEARN ini dan jangan tutup halaman selama pengecekan otomatis berlangsung.</li>
+        <li>Setelah pembayaran terdeteksi, kamu akan otomatis dialihkan ke halaman tujuan.</li>
+      </ol></section>
+      <p id="qrisMessage" class="payment-message" role="status" aria-live="polite"></p>
+    </section>
+
+    <section id="regularCheckout" class="regular-checkout" hidden>
+      <section class="hero"><span class="eyebrow">SECURE CHECKOUT</span><h1>Pembayaran</h1><p class="muted">Periksa detail pembayaranmu.</p></section>
+      <section class="card"><span id="checkoutType" class="pill">LINK</span><h2 id="checkoutTitle">Memuat detail…</h2><p id="checkoutDescription" class="muted"></p><div class="amount" id="checkoutAmount">—</div><div class="summary-row"><span id="checkoutFeeLabel">Potongan platform</span><b id="checkoutFee">—</b></div><div class="summary-row"><span>Penghasilan pemilik link</span><b id="checkoutCreatorNet">—</b></div><div class="summary-row"><span>Total pembayaran</span><b id="checkoutTotal">—</b></div><div id="paymentUnavailable" class="notice">Gateway pembayaran belum dikonfigurasi. Pembayaran belum dapat dilakukan.</div><p id="paymentMessage" class="muted" role="status"></p></section>
+    </section>
+  </main>
+  <div data-component="footer"></div>
+</body>
+</html>
