@@ -1,1 +1,45 @@
-<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f5f7fb"><title>Pengaturan — BEARN</title><link rel="stylesheet" href="/css/pengaturan.css"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script type="module" src="/js/pengaturan.js"></script></head><body data-auth="required"><div data-component="navbar"></div><main class="app"><section class="hero"><span class="eyebrow">PREFERENCES</span><h1>Pengaturan</h1><p class="muted">Atur preferensi dan keamanan akun.</p></section><section class="card"><div class="empty">Modul Pengaturan disiapkan pada struktur BEARN. Alur operasional dan tampilan admin akan diaktifkan pada tahap berikutnya.</div></section></main><div data-component="footer"></div></body></html>
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f5f7fb">
+  <title>Pengaturan — BEARN</title>
+  <link rel="stylesheet" href="/css/pengaturan.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script type="module" src="/js/pengaturan.js"></script>
+</head>
+<body data-auth="required">
+  <div data-component="navbar"></div>
+  <main class="app dashboard-app settings-app">
+    <section class="dashboard-hero">
+      <div><span class="eyebrow">ACCOUNT PREFERENCES</span><h1>Pengaturan</h1><p class="muted">Kelola informasi akun dan rekening tujuan pencairan.</p></div>
+      <div class="last-updated"><span class="live-dot"></span><span>Pengaturan akun</span></div>
+    </section>
+
+    <section class="settings-section" id="bank-ewallet">
+      <div class="section-heading">
+        <div class="section-heading-icon payment-heading-icon"><i class="fa-solid fa-building-columns" aria-hidden="true"></i></div>
+        <div><span class="section-kicker">PAYOUT DESTINATION</span><h2>Rekening Bank & E-Wallet</h2><p>Rekening ini akan digunakan sebagai tujuan withdraw.</p></div>
+      </div>
+      <div class="settings-grid">
+        <form class="settings-form" id="payoutMethodForm">
+          <div class="settings-form-head"><div><h3>Tambah rekening tujuan</h3><p>Pastikan nama dan nomor akun benar sebelum disimpan.</p></div><span class="form-card-icon manual-icon"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></span></div>
+          <div class="field"><label for="methodType">Jenis rekening</label><select id="methodType" name="method_type" required><option value="bank">Bank</option><option value="ewallet">E-Wallet</option></select></div>
+          <div class="field"><label for="provider">Nama bank / provider</label><input id="provider" name="provider" maxlength="60" placeholder="Contoh: BCA, BRI, DANA, OVO" required></div>
+          <div class="field"><label for="accountName">Nama pemilik rekening</label><input id="accountName" name="account_name" maxlength="100" autocomplete="name" placeholder="Nama sesuai rekening" required></div>
+          <div class="field"><label for="accountNumber">Nomor rekening / nomor e-wallet</label><input id="accountNumber" name="account_number" maxlength="64" inputmode="numeric" autocomplete="off" placeholder="Masukkan nomor rekening" required></div>
+          <label class="settings-default"><input type="checkbox" name="is_default" checked><span>Jadikan rekening utama untuk withdraw</span></label>
+          <button class="btn settings-submit" id="savePayoutMethod" type="submit"><i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> Simpan rekening</button>
+          <p class="settings-footnote">Informasi rekening hanya dapat dilihat oleh pemilik akun dan petugas berwenang untuk memproses pencairan.</p>
+        </form>
+        <section class="saved-methods-panel" aria-labelledby="savedMethodsTitle">
+          <div class="saved-methods-head"><div><h3 id="savedMethodsTitle">Rekening tersimpan</h3><p>Pilih satu rekening utama. Kamu dapat menyimpan lebih dari satu tujuan.</p></div><span class="saved-count" id="savedMethodCount">0</span></div>
+          <div id="savedPayoutMethods" class="saved-methods-list"><div class="empty">Memuat rekening tersimpan…</div></div>
+        </section>
+      </div>
+    </section>
+  </main>
+  <div data-component="footer"></div>
+</body>
+</html>
