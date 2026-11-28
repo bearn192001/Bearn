@@ -18,130 +18,81 @@
         <h1>Withdraw</h1>
         <p class="muted">Kelola pencairan saldo dengan proses yang jelas, aman, dan transparan.</p>
       </div>
-      <div class="last-updated" id="withdrawScheduleBadge"><span class="live-dot"></span><span>Memeriksa jadwal…</span></div>
     </section>
 
-    <section class="withdraw-status-panel" id="withdrawSchedule" aria-live="polite">
-      <div class="schedule-icon" id="scheduleIcon" aria-hidden="true">⏳</div>
-      <div class="schedule-copy">
-        <span class="section-kicker">JADWAL LAYANAN</span>
-        <h2 id="scheduleTitle">Memeriksa jadwal withdraw</h2>
-        <p id="scheduleMessage">Senin–Jumat, pukul 09.00–21.00 WIB. Tutup pada akhir pekan dan hari libur.</p>
-      </div>
-      <div class="schedule-hours"><b>09.00–21.00 WIB</b><small>Senin sampai Jumat</small></div>
-    </section>
-
-    <section class="metric-grid withdraw-metrics" aria-label="Ringkasan withdraw">
-      <article class="metric-card metric-green">
-        <div class="metric-card-top"><span class="metric-icon"><i class="fa-solid fa-wallet" aria-hidden="true"></i></span><span class="metric-period">TERSEDIA</span></div>
-        <div class="metric-label">Saldo penghasilan</div><div class="metric-value" id="availableBalance">Rp0</div>
-        <div class="metric-bottom">Saldo yang dapat diajukan untuk withdraw</div>
-      </article>
-      <article class="metric-card metric-blue">
-        <div class="metric-card-top"><span class="metric-icon"><i class="fa-solid fa-bolt" aria-hidden="true"></i></span><span class="metric-period">INSTAN / HARI</span></div>
-        <div class="metric-label">Batas penggunaan</div><div class="metric-value" id="instantDailyUsage">Rp0 / Rp500.000</div>
-        <div class="withdraw-progress"><span id="instantProgress"></span></div>
-        <div class="metric-bottom" id="instantRemaining">Sisa limit Rp500.000 hari ini</div>
-      </article>
-      <article class="metric-card metric-violet">
-        <div class="metric-card-top"><span class="metric-icon"><i class="fa-solid fa-list-check" aria-hidden="true"></i></span><span class="metric-period">MANUAL / HARI</span></div>
-        <div class="metric-label">Pengajuan digunakan</div><div class="metric-value" id="manualDailyUsage">0 / 5</div>
-        <div class="metric-bottom">Maksimal lima pengajuan per hari</div>
-      </article>
-      <article class="metric-card metric-amber">
-        <div class="metric-card-top"><span class="metric-icon"><i class="fa-solid fa-receipt" aria-hidden="true"></i></span><span class="metric-period">BIAYA</span></div>
-        <div class="metric-label">Biaya layanan</div><div class="metric-value">Rp13.000 / Rp10.000</div>
-        <div class="metric-bottom">Instan / Manual · pajak mengikuti pengaturan admin</div>
-      </article>
-    </section>
-
-    <section class="withdraw-section">
+    <!-- 1. Rekening tujuan: hanya rekening utama yang tersimpan ditampilkan. -->
+    <section class="withdraw-section payout-section" aria-labelledby="payoutHeading">
       <div class="section-heading">
         <div class="section-heading-icon payment-heading-icon"><i class="fa-solid fa-building-columns" aria-hidden="true"></i></div>
-        <div><span class="section-kicker">PAYOUT DESTINATION</span><h2>Rekening bank atau e-wallet</h2><p>Tujuan pencairan diambil dari rekening yang tersimpan di Pengaturan.</p></div>
+        <div><span class="section-kicker">PAYOUT DESTINATION</span><h2 id="payoutHeading">Rekening Tujuan</h2><p>Rekening bank atau e-wallet yang tersimpan di Pengaturan.</p></div>
         <a class="section-action" href="/pengaturan.html#bank-ewallet"><i class="fa-solid fa-gear" aria-hidden="true"></i> Atur rekening</a>
       </div>
       <div class="payout-card" id="payoutCard" hidden>
-        <div class="payout-card-icon"><i class="fa-solid fa-building-columns" aria-hidden="true"></i></div>
-        <div class="payout-card-main"><span id="payoutTypeLabel">BANK</span><b id="payoutProvider">—</b><strong id="payoutAccountName">—</strong><small id="payoutAccountNumber">—</small></div>
-        <span class="payout-default">Tujuan pencairan</span>
+        <div class="payout-card-icon" id="payoutCardIcon"><i class="fa-solid fa-building-columns" aria-hidden="true"></i></div>
+        <div class="payout-card-main">
+          <span id="payoutTypeLabel">BANK</span>
+          <b id="payoutProvider">—</b>
+          <strong id="payoutAccountName">—</strong>
+          <small id="payoutAccountNumber">—</small>
+        </div>
+        <span class="payout-default">Rekening utama</span>
       </div>
       <div class="notice payout-empty" id="payoutEmpty" hidden>
         <i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i>
-        <div><b>Rekening belum disimpan</b><p>Anda belum menambahkan rekening bank atau e-wallet. Simpan rekening terlebih dahulu sebelum mengajukan withdraw.</p><a class="btn" href="/pengaturan.html#bank-ewallet">Tambah rekening sekarang <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></div>
-      </div>
-      <div class="field payout-select-wrap" id="payoutSelectWrap" hidden>
-        <label for="payoutMethodSelect">Pilih rekening tujuan</label>
-        <select id="payoutMethodSelect"></select>
+        <div><b>Rekening belum disimpan</b><p>Tambahkan rekening bank atau e-wallet terlebih dahulu sebelum mengajukan withdraw.</p><a class="btn" href="/pengaturan.html#bank-ewallet">Tambah rekening <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></div>
       </div>
     </section>
 
-    <section class="withdraw-section">
+    <!-- 2. Withdraw instan -->
+    <section class="withdraw-section" aria-labelledby="instantHeading">
       <div class="section-heading">
         <div class="section-heading-icon auto-heading-icon"><i class="fa-solid fa-bolt" aria-hidden="true"></i></div>
-        <div><span class="section-kicker">PRIORITY PAYOUT</span><h2>Withdraw Instan</h2><p>Pengajuan masuk ke jalur prioritas instan pada panel admin.</p></div>
+        <div><span class="section-kicker">PRIORITY PAYOUT</span><h2 id="instantHeading">Withdraw Instan</h2><p>Pengajuan masuk ke jalur prioritas pada panel admin.</p></div>
         <span class="method-tag method-instant">PRIORITAS</span>
       </div>
       <form class="withdraw-form-card" id="instantWithdrawForm" novalidate>
-        <div class="form-card-head"><div><h3>Ajukan withdraw instan</h3><p>Minimal Rp50.000 · Maksimal akumulasi Rp500.000 per hari</p></div><span class="form-card-icon instant-icon"><i class="fa-solid fa-bolt" aria-hidden="true"></i></span></div>
+        <div class="form-card-head"><div><h3>Ajukan withdraw instan</h3><p>Minimal Rp50.000 · Maksimal Rp500.000 per hari</p></div><span class="form-card-icon instant-icon"><i class="fa-solid fa-bolt" aria-hidden="true"></i></span></div>
+        <div class="daily-limit-block">
+          <div class="daily-limit-top"><span>Limit instan hari ini</span><b id="instantDailyUsage">Rp0 / Rp500.000</b></div>
+          <div class="withdraw-progress" role="progressbar" aria-label="Penggunaan limit withdraw instan" aria-valuemin="0" aria-valuemax="500000" aria-valuenow="0"><span id="instantProgress"></span></div>
+          <small id="instantRemaining">Sisa limit Rp500.000 hari ini</small>
+        </div>
         <div class="field">
           <label for="instantAmount">Nominal withdraw</label>
-          <div class="amount-input-wrap"><span>Rp</span><input id="instantAmount" name="amount" type="number" inputmode="numeric" min="50000" max="500000" step="1000" placeholder="Minimal 50.000" required></div>
-          <small class="field-hint">Nominal dihitung dari saldo penghasilan. Batas harian berlaku untuk total pengajuan instan.</small>
+          <div class="amount-input-wrap"><span>Rp</span><input id="instantAmount" name="amount" type="number" inputmode="numeric" min="50000" max="500000" step="1000" placeholder="Masukkan nominal" required></div>
+          <small class="field-hint" id="instantBalanceHint">Saldo tersedia: memuat…</small>
         </div>
         <div class="amount-presets" aria-label="Pilihan nominal instan">
           <button type="button" data-amount="50000">50K</button><button type="button" data-amount="100000">100K</button><button type="button" data-amount="150000">150K</button><button type="button" data-amount="200000">200K</button><button type="button" data-amount="250000">250K</button><button type="button" data-amount="300000">300K</button><button type="button" data-amount="500000">500K</button>
         </div>
-        <div class="payout-breakdown">
-          <div><span>Nominal withdraw</span><b id="instantGross">Rp0</b></div>
-          <div><span>Fee provider instan</span><b id="instantFee">− Rp13.000</b></div>
-          <div><span>Potongan pajak</span><b id="instantTax">− Rp0</b></div>
-          <div class="breakdown-net"><span>Dana bersih ditransfer</span><strong id="instantNet">Rp0</strong></div>
-        </div>
-        <label class="terms-check"><input id="instantTerms" type="checkbox"><span>Saya menyetujui ketentuan withdraw instan, biaya provider, potongan pajak, dan rekening tujuan yang dipilih.</span></label>
+        <label class="terms-check"><input id="instantTerms" type="checkbox"><span>Saya menyetujui ketentuan withdraw instan, fee provider Rp13.000, potongan pajak sesuai ketentuan, dan rekening tujuan di atas.</span></label>
         <button class="btn withdraw-submit" id="instantSubmit" type="submit" disabled><i class="fa-solid fa-bolt" aria-hidden="true"></i> Ajukan Withdraw Instan</button>
-        <p class="form-footnote">Biaya provider Rp13.000. Pajak ditetapkan admin sebesar Rp0–Rp2.500. Transfer instan memerlukan pemrosesan admin/provider; pengajuan ini ditandai prioritas.</p>
       </form>
     </section>
 
-    <section class="withdraw-section">
+    <!-- 3. Withdraw manual + riwayat ringkas tetap berada dalam bagian yang sama. -->
+    <section class="withdraw-section manual-section" aria-labelledby="manualHeading">
       <div class="section-heading">
         <div class="section-heading-icon payment-heading-icon"><i class="fa-solid fa-building-columns" aria-hidden="true"></i></div>
-        <div><span class="section-kicker">STANDARD PAYOUT</span><h2>Withdraw Manual</h2><p>Pengajuan reguler dengan biaya layanan lebih rendah.</p></div>
+        <div><span class="section-kicker">STANDARD PAYOUT</span><h2 id="manualHeading">Withdraw Manual</h2><p>Pengajuan reguler dengan biaya layanan Rp10.000.</p></div>
         <span class="method-tag method-manual">REGULER</span>
       </div>
       <form class="withdraw-form-card" id="manualWithdrawForm" novalidate>
         <div class="form-card-head"><div><h3>Ajukan withdraw manual</h3><p>Minimal Rp100.000 · Maksimal lima pengajuan per hari</p></div><span class="form-card-icon manual-icon"><i class="fa-solid fa-building-columns" aria-hidden="true"></i></span></div>
         <div class="field">
           <label for="manualAmount">Nominal withdraw</label>
-          <div class="amount-input-wrap"><span>Rp</span><input id="manualAmount" name="amount" type="number" inputmode="numeric" min="100000" step="1000" placeholder="Minimal 100.000" required></div>
-          <small class="field-hint">Kamu dapat memasukkan nominal sendiri atau memilih gunakan seluruh saldo tersedia.</small>
+          <div class="amount-input-wrap"><span>Rp</span><input id="manualAmount" name="amount" type="number" inputmode="numeric" min="100000" step="1000" placeholder="Masukkan nominal" required></div>
+          <small class="field-hint" id="manualBalanceHint">Saldo tersedia: memuat…</small>
         </div>
         <div class="manual-amount-actions"><button type="button" class="btn secondary" id="useAllBalance"><i class="fa-solid fa-maximize" aria-hidden="true"></i> Gunakan semua saldo</button><span id="manualCountHint">0 dari 5 pengajuan hari ini</span></div>
-        <div class="payout-breakdown">
-          <div><span>Nominal withdraw</span><b id="manualGross">Rp0</b></div>
-          <div><span>Fee withdraw manual</span><b id="manualFee">− Rp10.000</b></div>
-          <div><span>Potongan pajak</span><b id="manualTax">− Rp0</b></div>
-          <div class="breakdown-net"><span>Dana bersih ditransfer</span><strong id="manualNet">Rp0</strong></div>
-        </div>
-        <label class="terms-check"><input id="manualTerms" type="checkbox"><span>Saya menyetujui ketentuan withdraw manual, biaya layanan, potongan pajak, dan rekening tujuan yang dipilih.</span></label>
+        <label class="terms-check"><input id="manualTerms" type="checkbox"><span>Saya menyetujui ketentuan withdraw manual, fee Rp10.000, potongan pajak sesuai ketentuan, dan rekening tujuan di atas.</span></label>
         <button class="btn withdraw-submit" id="manualSubmit" type="submit" disabled><i class="fa-solid fa-paper-plane" aria-hidden="true"></i> Ajukan Withdraw Manual</button>
-        <p class="form-footnote">Biaya withdraw manual Rp10.000. Pajak mengikuti pengaturan admin dan ditampilkan sebelum pengajuan dikirim.</p>
+
+        <details class="history-disclosure">
+          <summary><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i> Riwayat pengajuan withdraw <span>Terbaru</span></summary>
+          <div class="history-list" id="withdrawHistory"><div class="empty">Riwayat akan ditampilkan setelah data dimuat.</div></div>
+        </details>
       </form>
-    </section>
-
-    <section class="withdraw-section history-section">
-      <div class="section-heading">
-        <div class="section-heading-icon auto-heading-icon"><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i></div>
-        <div><span class="section-kicker">PAYOUT ACTIVITY</span><h2>Riwayat Withdraw</h2><p>Pantau ID pengajuan, rekening tujuan, nominal bersih, dan status pembayaran.</p></div>
-      </div>
-      <div class="history-list" id="withdrawHistory"><div class="empty">Memuat riwayat withdraw…</div></div>
-    </section>
-
-    <section class="withdraw-section holiday-section" id="holidaySection" hidden>
-      <div class="section-heading simple-heading"><div><span class="section-kicker">UPCOMING CLOSURES</span><h2>Kalender hari libur</h2></div></div>
-      <div class="holiday-list" id="holidayList"></div>
-      <p class="form-footnote">Jadwal hari libur mengikuti kalender yang tersimpan di sistem dan dapat diperbarui pengelola.</p>
     </section>
   </main>
   <div data-component="footer"></div>
