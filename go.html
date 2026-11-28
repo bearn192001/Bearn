@@ -1,12 +1,81 @@
 <!doctype html>
-<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Go — BEARN</title><link rel="stylesheet" href="/css/go.css"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script type="module" src="/js/go.js"></script></head>
-<body><div data-component="navbar"></div><main class="app narrow">
-  <section class="hero"><span class="eyebrow">BEARN GO</span><h1 id="goTitle">Membuka Auto Link</h1><p class="muted" id="goSubtitle">Verifikasi akses untuk melanjutkan.</p></section>
-  <section class="card" id="passwordCard" hidden><form id="passwordForm"><div class="field"><label for="goPassword">Password link</label><input id="goPassword" type="password" required autocomplete="current-password" placeholder="Masukkan password"></div><button class="btn" type="submit">Buka Link</button><p id="passwordMessage" class="muted" role="status"></p></form></section>
-  <section class="card" id="accessCard" hidden>
-    <div class="access-option" id="instantOption" hidden><div><span class="pill">GRATIS</span><h2>Langsung akses</h2><p class="muted">Lanjut langsung ke link tujuan tanpa melewati tahap tambahan.</p></div><a class="btn" id="instantStart" href="#">Lanjutkan</a></div>
-    <div class="access-option" id="freeOption" hidden><div><span class="pill">GRATIS</span><h2>Gratis dengan Tag</h2><p class="muted">Selesaikan Tag 1, Tag 2, dan Tag 3 sebelum Final Check.</p></div><a class="btn secondary" id="freeStart" href="#">Lanjut gratis</a></div>
-    <div class="access-option" id="paidOption" hidden><div><span class="pill">PAYMENT</span><h2>Langsung akses berbayar</h2><p class="muted">Bayar Rp3.500 untuk mendapatkan akses langsung.</p></div><a class="btn" id="paidStart" href="#">Bayar Rp3.500</a></div>
-  </section>
-  <p id="goMessage" class="muted" role="status"></p>
-</main><div data-component="footer"></div></body></html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f5f7fb">
+  <title>Go — BEARN</title>
+  <link rel="stylesheet" href="/css/go.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script type="module" src="/js/go.js"></script>
+</head>
+<body>
+  <div data-component="navbar"></div>
+  <main class="app narrow go-shell">
+    <section class="hero">
+      <span class="eyebrow">BEARN GO</span>
+      <h1 id="goTitle">Membuka Auto Link</h1>
+      <p class="muted" id="goSubtitle">Verifikasi akses untuk melanjutkan.</p>
+    </section>
+
+    <section class="endorse-slot" data-endorse-slot="top" aria-label="Endorse pilihan"></section>
+
+    <section class="card password-card" id="passwordCard" hidden>
+      <form id="passwordForm">
+        <div class="field">
+          <label for="goPassword">Password link</label>
+          <input id="goPassword" type="password" required autocomplete="current-password" placeholder="Masukkan password">
+        </div>
+        <button class="btn" type="submit">Buka Link</button>
+        <p id="passwordMessage" class="muted" role="status"></p>
+      </form>
+    </section>
+
+    <section class="access-stack" id="accessCard" hidden aria-label="Pilihan akses Auto Link">
+      <div class="card access-card access-option" id="instantOption" hidden>
+        <div class="access-copy">
+          <span class="pill">GRATIS</span>
+          <h2>Langsung Akses</h2>
+          <p class="muted">Lanjut langsung ke tujuan tanpa melewati tahapan tambahan.</p>
+        </div>
+        <a class="btn" id="instantStart" href="#">Lanjut Langsung Akses</a>
+      </div>
+
+      <section class="endorse-slot" data-endorse-slot="middle" aria-label="Slot promosi kedua"></section>
+
+      <div class="card access-card access-option" id="freeOption" hidden>
+        <div class="access-copy">
+          <span class="pill">FREE ACCESS</span>
+          <h2>Lanjut dengan Free</h2>
+          <p class="muted">Selesaikan Tag 1, Tag 2, dan Tag 3 sebelum Final Check untuk membuka tujuan.</p>
+        </div>
+        <a class="btn secondary" id="freeStart" href="#">Lanjut dengan Free</a>
+      </div>
+
+      <section class="endorse-slot" data-endorse-slot="bottom" aria-label="Slot promosi ketiga"></section>
+
+      <div class="card access-card access-option paid-option" id="paidOption" hidden>
+        <div class="access-copy">
+          <span class="pill">PAID ACCESS</span>
+          <h2>Langsung Akses Berbayar</h2>
+          <p class="muted">Pilih akses berbayar untuk mendapatkan akses langsung.</p>
+        </div>
+        <a class="btn" id="paidStart" href="#">Bayar Rp3.500</a>
+      </div>
+    </section>
+
+    <section class="join-banner">
+      <span class="join-icon" aria-hidden="true">✦</span>
+      <div>
+        <span class="eyebrow">GABUNG BEARN</span>
+        <h2>Bangun penghasilan dari Auto Link Anda</h2>
+        <p>Buat dan bagikan link Anda. Semakin banyak pengunjung valid yang menyelesaikan akses, semakin besar peluang pendapatan Anda. Penarikan dapat diajukan sesuai ketentuan BEARN.</p>
+        <a class="btn join-btn" href="/register.html">Gabung BEARN Sekarang</a>
+      </div>
+    </section>
+
+    <p id="goMessage" class="muted go-message" role="status" aria-live="polite"></p>
+  </main>
+  <div data-component="footer"></div>
+</body>
+</html>
