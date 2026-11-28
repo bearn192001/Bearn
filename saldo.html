@@ -1,1 +1,108 @@
-<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f5f7fb"><title>Saldo — BEARN</title><link rel="stylesheet" href="/css/saldo.css"><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script type="module" src="/js/saldo.js"></script></head><body data-auth="required"><div data-component="navbar"></div><main class="app"><section class="hero"><span class="eyebrow">WALLET</span><h1>Saldo</h1><p class="muted">Saldo top up dan saldo penghasilan dicatat secara terpisah.</p></section><section class="grid stats"><div class="card"><div class="stat-label">Saldo Top Up</div><div class="stat-value" id="topupBalance">Rp0</div><p class="stat-note">Digunakan untuk transaksi dalam platform.</p></div><div class="card"><div class="stat-label">Saldo Penghasilan</div><div class="stat-value" id="earningBalance">Rp0</div><p class="stat-note">Penghasilan bersih dari link.</p></div></section><div class="notice" class="notice notice-spaced">Top up melalui QRIS/DANA akan tersedia setelah gateway pembayaran dipasang. Saat ini tidak ada transaksi uang sungguhan yang diproses.</div></main><div data-component="footer"></div></body></html>
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f5f7fb">
+  <title>Saldo — BEARN</title>
+  <link rel="stylesheet" href="/css/saldo.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script type="module" src="/js/saldo.js"></script>
+</head>
+<body data-auth="required">
+  <div data-component="navbar"></div>
+  <main class="app wallet-app">
+    <section class="wallet-hero">
+      <div>
+        <span class="eyebrow">BEARN WALLET</span>
+        <h1>Saldo</h1>
+        <p class="muted">Pantau saldo siap withdraw dan seluruh pendapatan link kamu.</p>
+      </div>
+      <div class="wallet-updated"><span class="live-dot"></span><span id="walletUpdated">Memuat saldo…</span></div>
+    </section>
+
+    <section class="wallet-balance-grid" aria-label="Ringkasan saldo">
+      <article class="wallet-card wallet-card-primary">
+        <div class="wallet-card-top">
+          <span class="wallet-icon"><i class="fa-solid fa-wallet" aria-hidden="true"></i></span>
+          <span class="wallet-tag">SIAP DITARIK</span>
+        </div>
+        <div class="wallet-label">Saldo Tersedia</div>
+        <div class="wallet-amount" id="availableBalance">Rp0</div>
+        <p class="wallet-note">Saldo penghasilan yang tersedia untuk diajukan ke withdraw.</p>
+        <a class="withdraw-action" href="/withdraw.html"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i> Withdraw Sekarang</a>
+      </article>
+
+      <article class="wallet-card wallet-card-auto">
+        <div class="wallet-card-top">
+          <span class="wallet-icon"><i class="fa-solid fa-link" aria-hidden="true"></i></span>
+          <span class="wallet-tag">TOTAL PENDAPATAN</span>
+        </div>
+        <div class="wallet-label">Saldo Auto Link</div>
+        <div class="wallet-amount" id="autoLinkBalance">Rp0</div>
+        <p class="wallet-note">Pendapatan dari redirect valid Free Access dan Direct Access.</p>
+      </article>
+
+      <article class="wallet-card wallet-card-payment">
+        <div class="wallet-card-top">
+          <span class="wallet-icon"><i class="fa-solid fa-credit-card" aria-hidden="true"></i></span>
+          <span class="wallet-tag">TOTAL PENDAPATAN</span>
+        </div>
+        <div class="wallet-label">Saldo Payment Link</div>
+        <div class="wallet-amount" id="paymentLinkBalance">Rp0</div>
+        <p class="wallet-note">Pendapatan bersih dari transaksi Payment Link yang berhasil.</p>
+      </article>
+    </section>
+
+    <section class="month-summary">
+      <div class="month-summary-icon"><i class="fa-solid fa-calendar-check" aria-hidden="true"></i></div>
+      <div><span class="section-kicker">RINGKASAN BULAN INI</span><h2>Total Perolehan Bulan Ini</h2><p>Akumulasi pendapatan yang berhasil masuk pada bulan berjalan.</p></div>
+      <strong id="monthEarnings">Rp0</strong>
+    </section>
+
+    <section class="history-section" aria-labelledby="historyTitle">
+      <div class="section-heading">
+        <div class="section-heading-icon wallet-history-icon"><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i></div>
+        <div><span class="section-kicker">WALLET ACTIVITY</span><h2 id="historyTitle">Riwayat Pendapatan</h2><p>Lihat pendapatan berdasarkan tanggal yang kamu pilih.</p></div>
+      </div>
+
+      <div class="history-panel">
+        <div class="history-panel-head">
+          <div><h3>Filter Periode</h3><p id="rangeLabel">Pendapatan 7 hari terakhir</p></div>
+          <div class="range-total"><span>Total periode</span><strong id="rangeEarnings">Rp0</strong></div>
+        </div>
+
+        <div class="period-tabs" role="group" aria-label="Pilih periode pendapatan">
+          <button type="button" class="period-tab" data-days="1">1 Hari</button>
+          <button type="button" class="period-tab is-active" data-days="7">1 Minggu</button>
+          <button type="button" class="period-tab" data-days="15">15 Hari</button>
+          <button type="button" class="period-tab" data-days="30">30 Hari</button>
+        </div>
+
+        <div class="date-filter">
+          <label>Mulai tanggal<input type="date" id="startDate"></label>
+          <span class="date-separator">sampai</span>
+          <label>Akhir tanggal<input type="date" id="endDate"></label>
+          <button type="button" class="apply-date" id="applyDate"><i class="fa-solid fa-filter" aria-hidden="true"></i> Terapkan</button>
+        </div>
+
+        <div class="history-list" id="earningList" aria-live="polite">
+          <div class="history-empty">Memuat riwayat pendapatan…</div>
+        </div>
+
+        <div class="history-footer">
+          <span id="historyCount">Menampilkan 0 pendapatan</span>
+          <div class="pagination">
+            <button type="button" id="prevPage" aria-label="Halaman sebelumnya" disabled><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button>
+            <span id="pageLabel">1 / 1</span>
+            <button type="button" id="nextPage" aria-label="Halaman berikutnya" disabled><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="wallet-notice"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i><p>Pendapatan Auto Link dihitung dari redirect valid yang lolos verifikasi server. View berulang dari visitor yang sama pada link yang sama dalam satu hari tidak menambah pendapatan.</p></div>
+  </main>
+  <div data-component="footer"></div>
+</body>
+</html>
