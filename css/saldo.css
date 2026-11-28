@@ -25,3 +25,14 @@
 @media(max-width:650px){.wallet-app{padding:22px 15px 50px}.wallet-hero{align-items:flex-start;flex-direction:column;padding:22px 19px;margin:7px 0 22px;border-radius:19px}.wallet-updated{align-self:flex-start}.wallet-balance-grid{grid-template-columns:1fr 1fr;gap:10px}.wallet-card{padding:15px 14px;border-radius:15px}.wallet-card-primary{grid-column:1/-1}.wallet-card-top{margin-bottom:14px}.wallet-icon{width:35px;height:35px;border-radius:11px}.wallet-amount{font-size:clamp(19px,5.6vw,25px)}.wallet-label{font-size:10px}.wallet-note{font-size:9px;min-height:42px}.month-summary{align-items:flex-start;gap:11px;padding:15px}.month-summary-icon{width:37px;height:37px;flex-basis:37px}.month-summary h2{font-size:12px}.month-summary p{font-size:9px}.month-summary>strong{font-size:19px}.section-heading{gap:10px}.section-heading-icon{width:40px;height:40px;flex-basis:40px;border-radius:12px}.section-heading h2{font-size:17px}.section-heading p{font-size:10px}.history-panel{padding:17px 14px 12px;border-radius:17px}.history-panel-head{gap:8px}.range-total strong{font-size:15px}.period-tabs{display:grid;grid-template-columns:repeat(4,1fr);width:100%}.period-tab{padding:8px 5px;font-size:9px}.date-filter{display:grid;grid-template-columns:1fr 1fr;gap:9px}.date-filter label{min-width:0}.date-filter input{width:100%;min-width:0;box-sizing:border-box}.date-separator{display:none}.apply-date{grid-column:1/-1}.earning-row{gap:9px;padding:12px 0}.earning-icon{width:34px;height:34px;flex-basis:34px}.earning-info strong{font-size:10px}.earning-info small{font-size:8px}.earning-amount{font-size:10px}.history-footer{align-items:flex-start;flex-direction:column}.pagination{align-self:flex-end}.wallet-notice{align-items:flex-start}.wallet-notice p{font-size:8px}}
 @media(max-width:380px){.wallet-balance-grid{grid-template-columns:1fr}.wallet-card-primary{grid-column:auto}.wallet-card:not(.wallet-card-primary){min-height:0}.month-summary{flex-wrap:wrap}.month-summary>strong{width:100%;margin-left:48px}.history-panel-head{flex-direction:column}.range-total{text-align:left}.earning-info .earning-note{max-width:52vw}}
 @media(prefers-reduced-motion:reduce){.wallet-card,.period-tab,.apply-date,.withdraw-action{transition:none}}
+
+/* Final refinements shared with the dashboard's pro visual system. */
+.wallet-app{width:min(100%,1220px)}
+.wallet-hero,.history-panel,.month-summary,.wallet-card{backdrop-filter:saturate(1.08)}
+.wallet-card:focus-within,.history-panel:focus-within{outline:none}
+.period-tab:focus-visible,.apply-date:focus-visible,.pagination button:focus-visible,.withdraw-action:focus-visible,.date-filter input:focus-visible{outline:3px solid rgba(73,109,224,.22);outline-offset:2px}
+.wallet-error{padding:24px 18px;color:#c05b5b}
+.wallet-error i{color:#d46a6a}
+.wallet-error strong{color:#9d4141}
+.wallet-error span{max-width:560px;color:#9a7474;line-height:1.6}
+@media(max-width:650px){.wallet-app{width:100%}.wallet-hero{margin-top:8px}}
